@@ -1,2 +1,2 @@
-/// <reference path="typedefs/ember/ember.d.ts" />
+/// <reference path="../../src/ts/typedefs/ember/ember.d.ts" />
 declare var App: Ember.Application;
