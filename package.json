@@ -1,12 +1,23 @@
 {
   "name": "moaifiddle",
   "version": "0.1.0",
+  "dependencies": {
+    "d.js": "^0.6.0",
+    "underscore": "^1.6.0",
+    "event-stream": "^3.1.0",
+    "hogan-express": "^0.5.2",
+    "any-db-sqlite3": "^2.1.1",
+    "express": "~3.4.8",
+    "static-favicon": "~1.0.0",
+    "morgan": "~1.0.0",
+    "cookie-parser": "~1.0.1",
+    "body-parser": "~1.0.0",
+    "debug": "~0.7.4"
+  },
   "devDependencies": {
-    "grunt": "~0.4.2",
-    "grunt-contrib-jshint": "~0.6.3",
-    "grunt-contrib-nodeunit": "~0.2.0",
-    "grunt-contrib-uglify": "~0.2.2",
-    "grunt-typescript": "^0.2.9",
-    "grunt-contrib-watch": "^0.6.0"
+      "db-migrate": "~0.6.4",
+      "sqlite3": "~2.2.0"
   }
+
+
 }
