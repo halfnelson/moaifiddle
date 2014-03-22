@@ -1,0 +1,7 @@
+
+{{#yield-head}}
+    <title>{{ title }}</title>
+{{/yield-head}}
+
+<h1>{{ title }}</h1>
+<p>Welcome to {{ title }}</p>
