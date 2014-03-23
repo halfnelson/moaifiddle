@@ -6,7 +6,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-
 var editor = require('./routes/edit');
 
 var app = express();
@@ -39,12 +38,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(app.router);
 
-//resolve our slugs and versions
-app.param('slug')
-
-app.get('/:slug/:version', editor.show);
+app.get('/:slug/:revision', editor.show);
 app.get('/:slug', editor.show);
-app.post('/:slug/:version', editor.show);
+app.get('/', editor.show);
+
+app.post('/:slug/:revision', editor.save);
 app.post('/:slug', editor.save);
 
 
