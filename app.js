@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var editor = require('./routes/edit');
+var runner = require('./routes/runner');
 
 var app = express();
 var fs = require('fs');
@@ -17,6 +18,7 @@ app.set('view engine', 'hjs');
 app.set('layout','layout');
 app.engine('hjs', require('hogan-express'));
 app.use(favicon());
+
 app.use(logger('dev'));
 app.use(express.compress());
 app.use(bodyParser.json());
@@ -38,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(app.router);
 
+app.post('/run', runner.index);
 app.get('/:slug/:revision', editor.show);
 app.get('/:slug', editor.show);
 app.get('/', editor.show);

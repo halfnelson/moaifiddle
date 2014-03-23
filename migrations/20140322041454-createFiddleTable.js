@@ -4,7 +4,7 @@ var type = dbm.dataType;
 exports.up = function(db, callback) {
     db.createTable('fiddles', {
         id: { type: 'int', primaryKey: true, autoIncrement: true },
-        slug: { type: 'string', unique: true, notNull: true },
+        slug: { type: 'string', notNull: true },
         user_id: 'int',
         revision: {type: 'int', defaultValue: 1},
         fiddle: 'text',
@@ -13,5 +13,5 @@ exports.up = function(db, callback) {
 };
 
 exports.down = function(db, callback) {
-   db.dropTable('fiddles');
+   db.dropTable('fiddles', callback);
 };

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>MoaiJS</title>
+    <link href="/moaijs/css/style.css" rel="stylesheet">
+</head>
+<body>
+<style>
+    html {
+        height: 100%;
+    }
+    body {
+        color: rgb(51, 51, 51);
+        font-size: 14px;
+        height:100%;
+        margin:0;
+        padding:0;
+    }
+
+    #moaiplayer {
+        width: 100%;
+        height: 100%;
+        margin:auto;
+    }
+</style>
+
+<div id="moaiplayer" class="moai-player" data-title="Result" data-ram="48"></div>
+<div id="console">
+
+</div>
+<!-- we need these -->
+<script type="text/javascript" src="/moaijs/howler.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<!-- the app -->
+<script type="text/javascript" src="/moaijs/moaijs.js"></script>
+<script type="text/javascript" src="/moaijs/moaihost.js"></script>
+<script src="/javascripts/b64.js"></script>
+<script>
+    var player = new MoaiPlayer($("#moaiplayer"));
+
+    var cons = document.getElementById("console");
+    player.onPrint = function(x) {
+        var line = document.createElement('pre');
+        line.textContent = x;
+        cons.appendChild(line);
+    };
+    player.runString(b64.base64ToStr("{{{fiddle}}}"));
+</script>
+</body>
+</html>
+
+
+
+
+

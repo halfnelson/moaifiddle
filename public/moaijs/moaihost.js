@@ -283,24 +283,26 @@ return doLoadRom; //only expose this function
 var MoaiJS = (function() {
 
 
-function MoaiJS(canvas, total_memory, onTitleChange, onStatusChange, onError, onResolutionChange ) {
+function MoaiJS(canvas, total_memory, onTitleChange, onStatusChange, onError, onPrint, onResolutionChange ) {
 	this.canvas = canvas;
 	this.onTitleChange = onTitleChange;
 	this.onStatusChange = onStatusChange;
 	this.onError = onError;
+    this.onPrint = onPrint;
 	this.onResolutionChange = onResolutionChange;
 	this.emscripten = null;
 	this.total_memory = total_memory;
-	this.loadedFileSystem = null;
+	this.loadedFileSystems = []; //array of filesystem urls to load
 
     console.log("MoaiJS Init");
 }
 
-MoaiJS.prototype.initEmscripten = function() {
-	if (this.emscripten) return;
+MoaiJS.prototype.getEmscripten = function() {
+	if (this.emscripten) return this.emscripten;
     var Opts = { //our required emscripten settings
     		canvas: this.canvas,
     		setStatus: this.onStatusChange,
+            print: this.onPrint,
     		printErr: this.onError,
     		noExitRuntime: true,
     		totalDependencies: 0,
@@ -328,6 +330,7 @@ MoaiJS.prototype.initEmscripten = function() {
 	//callbacks
 	this.emscripten.SetOpenWindowFunc(this.OpenWindowFunc.bind(this));
     this.emscripten.SetSaveFunc(this.SaveFile.bind(this));
+    return this.emscripten;
 }
 
 MoaiJS.prototype.loadFileSystem = function(romUrl) {
@@ -337,26 +340,34 @@ MoaiJS.prototype.loadFileSystem = function(romUrl) {
 	   		that.onStatusChange(prefix+": "+done+"/"+total);
 		}
   };
-  this.initEmscripten(); 
-  console.log("MoaiJS Load Filesystem");
-  this.loadedFileSystem = window.LoadRom(this.emscripten,romUrl, makeProgress('Loading Data'), makeProgress('Installing File'));
+  console.log("MoaiJS Load Filesystem "+romUrl);
+  this.loadedFileSystems.push(window.LoadRom(this.getEmscripten(),romUrl, makeProgress('Loading Data'), makeProgress('Installing File')));
 }
 
-MoaiJS.prototype.run = function(mainLua, romUrl) {
-	var that = this;
-	if (!this.loadedFileSystem) {
-		if (!romUrl) {
-			console.log("No file system specified or loaded");
-			return;
-		}
-		this.loadFileSystem(romUrl);
-	}
+MoaiJS.prototype.runFunc = function(func) {
+    var that=this;
+    D.all(this.loadedFileSystems).then(function(){
+        console.log("MoaiJS Filesystem Loaded");
+        that.getEmscripten().addOnPreMain(function() {
+            that.hostinit();
+            func();
+        } );
+        that.emscripten.run();
+    }).rethrow();
+}
 
-	this.loadedFileSystem.then(function(){
-	   console.log("MoaiJS Filesystem Loaded");	
-  	   that.emscripten.addOnPreMain(function(){ that.runhost(mainLua); });
-  	   that.emscripten.run();   
-  	}).rethrow();
+MoaiJS.prototype.run = function(mainLua) {
+        var that = this;
+        this.runFunc(function() {
+            that.runhost(mainLua);
+        });
+}
+
+MoaiJS.prototype.runString = function(luaStr) {
+    var that = this;
+    this.runFunc(function() {
+        that.AKURunString(luaStr);
+    });
 }
 
 
@@ -538,17 +549,23 @@ MoaiJS.prototype.unpause = function() {
 	this.startUpdates();
 }
 
+MoaiJS.prototype.hostinit = function() {
+    console.log("refreshing context");
+    this.RefreshContext();
+    console.log("setting working directory");
+    this.AKUSetWorkingDirectory('/');
+    console.log("setting up canvas");
+    this.AKURunString('MOAIEnvironment.horizontalResolution = '+this.canvas.width);
+    this.AKURunString('MOAIEnvironment.verticalResolution = '+this.canvas.height);
+}
+
 MoaiJS.prototype.runhost = function(mainLua) {
 	console.log("runhost called");
 	console.log("restoring save state");
 	this.restoreDocumentDirectory();
-	console.log("refreshing context");
-	this.RefreshContext();
-	console.log("setting working directory");
-	this.AKUSetWorkingDirectory('/');
-	console.log("setting up canvas");
-	this.AKURunString('MOAIEnvironment.horizontalResolution = '+this.canvas.width);
-	this.AKURunString('MOAIEnvironment.verticalResolution = '+this.canvas.height);
+
+    this.hostinit();
+
 	var main = mainLua || 'main.lua'
 	console.log("launching "+main);
 	this.AKURunScript(main);
@@ -659,7 +676,7 @@ function MoaiPlayer(element) {
 	var canvasEl = el.find(".moai-canvas").first();
 	var canvasWrapperEl = el.find(".moai-canvas-wrapper").first();
 	//get settings
-	this.url = el.attr('data-url') || 'moaiapp.rom';
+	this.url = el.attr('data-url');
 	this.script = el.attr('data-script') || 'main.lua';
 	var ram = parseInt(el.attr('data-ram') || "48" ,10);
 	var title = el.attr('data-title') || 'Moai Player';
@@ -683,12 +700,25 @@ function MoaiPlayer(element) {
 		console.log("ERROR: ",err);
 	}
 
+    this.onPrint = function(x) {
+        console.log(x);
+    }
+
+    function onPrint(x) {
+        this.onPrint(x);
+    }
+
 	onTitleChange(title);
-	this.moai = new MoaiJS(canvasEl[0],ram*1024*1024,onTitleChange,onStatusChange,onError, onResolutionChange);
+	this.moai = new MoaiJS(canvasEl[0],ram*1024*1024,onTitleChange,onStatusChange,onError,onPrint.bind(this), onResolutionChange);
 }
 
 MoaiPlayer.prototype.run = function() {
-	this.moai.run(this.script, this.url);	
+    this.moai.loadFileSystem(this.url);
+    this.moai.run(this.script);
+}
+
+MoaiPlayer.prototype.runString = function(str) {
+    this.moai.runString(str);
 }
 
 MoaiPlayer.prototype.stop = function() {

@@ -1,5 +1,14 @@
 <h1>EDIT</h1>
-<p>Slug: {{slug}}</p>
-<p>Created: {{created}}</p>
-<p>Revision: {{revision}}</p>
-<p>precrypt: {{precrypt}}</p>
+<form method="post" action="/run" target="result">
+
+    <input type="hidden" value="{{slug}}" name="slug">
+<input type="hidden" value="{{revision}}" name="revision">
+<textarea name="fiddle">
+    {{fiddle}}
+</textarea>
+    <input type="submit">
+</form>
+<hr>
+<iframe name="result" id="result" width="600" height="600">
+</iframe>
+<hr>

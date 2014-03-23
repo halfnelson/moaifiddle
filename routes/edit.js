@@ -22,7 +22,7 @@ var show = function(req, res, next) {
 };
 
 var save = function (req, res) {
-
+    res.send(500,"Not IMplemented");
 };
 
 module.exports = { show: show,
