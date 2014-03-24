@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="/vendor/jquery-ui/css/smoothness/jquery-ui-1.10.4.custom.css" rel="stylesheet">
+    <script src="/vendor/jquery-ui/js/jquery-1.10.2.js"></script>
+    <script src="/vendor/jquery-ui/js/jquery-ui-1.10.4.custom.js"></script>
+
+</head>
+<body>
+
+<div id="editorContainer"></div>
+
+<script id="editorTemplate" type="text/ractive">
+    <div id="editorNav">
+    </div>
+    <div class="cols" on-mousemove="splitter-move" on-mouseup="splitter-end-move">
+       <div class="resizable code-wrapper" style='width: {{ splitter.location }}%'>
+       <form method="post" action="/run" target="result">
+            <input type="hidden" value="<%= slug %>" name="slug">
+            <input type="hidden" value="<%= revision %>" name="revision">
+            <textarea name="fiddle">
+                <%= fiddle %>
+            </textarea>
+            <input type="submit">
+        </form>
+        </div>
+        <div class="splitter-vertical" style="left: {{splitter.location}}%" on-mousedown="splitter-begin-move"   ></div>
+        <div class="resizable player-wrapper" style='width: {{ 100 - splitter.location }}%'>
+        <iframe name="result" id="result" style='pointer-events: {{ splitter.dragging ? "none" : "auto" }}' >
+        </iframe>
+        </div>
+    </div>
+</script>
+
+
+<script src="/vendor/ractive.js"></script>
+
+<script>
+    var ractive = new Ractive({
+        el: 'editorContainer',
+        template: '#editorTemplate',
+        data: {
+            splitter: {
+                location: 50,
+                dragging: false
+            }
+        },
+        complete: function() {
+            this.splitter = $(this.el).find(".splitter-vertical").first();
+        }
+    });
+    ractive.on("splitter-begin-move", function(event) {
+        this.set('splitter.dragging', true);
+    });
+    ractive.on("splitter-end-move", function(event) {
+        this.set('splitter.dragging', false);
+    });
+    ractive.on("splitter-move", function(event) {
+        if (!this.get('splitter.dragging')) return;
+        this.set('splitter.location',(event.original.x/$(window).width()) *100);
+    });
+
+
+
+</script>
+
+</body>
+</html>

@@ -17,7 +17,7 @@ var show = function(req, res, next) {
             res.send(404,"No such fiddle");
             return;
         }
-        res.render('edit/edit',fiddle);
+        res.render('edit/edit.ejs',fiddle);
     }).error(next);
 };
 
