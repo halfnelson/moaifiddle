@@ -27,8 +27,12 @@
         </div>
         <div class="splitter-vertical" style="left: {{splitter.location}}%" on-mousedown="splitter-begin-move"   ></div>
         <div class="resizable player-wrapper" style='width: {{ 100 - splitter.location }}%'>
-        <iframe name="result" id="result" style='pointer-events: {{ splitter.dragging ? "none" : "auto" }}' >
-        </iframe>
+        <div class="result-container">
+            <iframe name="result" id="result" style='pointer-events: {{ splitter.dragging ? "none" : "auto" }}; height: {{hsplitter.location}}% ' >
+            </iframe>
+            <div class="splitter-horizontal" style="top: {{hsplitter.location}}%"></div>
+            <div id="player-console" style="height: {{100 - hsplitter.location }}%"></div>
+           </div>
         </div>
     </div>
 </script>
@@ -41,6 +45,10 @@
         el: 'editorContainer',
         template: '#editorTemplate',
         data: {
+            hsplitter: {
+                location: 50,
+                dragging: false
+            },
             splitter: {
                 location: 50,
                 dragging: false
