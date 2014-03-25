@@ -5,7 +5,10 @@
     width: 50%;
     position: absolute;
     box-sizing: border-box;
-    border:1px solid #CCCCCC;
+}
+
+.code-wrapper {
+    border: 1px solid #666;
 }
 
 .player-wrapper {
@@ -14,22 +17,23 @@
 
 .code-wrapper {
   left: -4px;
+    background-color: #222;
 }
 
 .player-wrapper iframe {
     overflow: auto;
-    border:0;
+    border:1px solid #666;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     position: absolute;
     width:100%;
     top: -4px;
+    background-color: #222;
 }
 .splitter-horizontal {
     height: 8px;
     width: 100%;
-    background-color: blue;
     position: absolute;
     cursor: row-resize;
     margin-top: -5px;
@@ -46,12 +50,16 @@
     width: 100%;
     position: absolute;
     bottom: -4px;
+    box-sizing: border-box;
+    border: 1px solid #666;
+    background-color: #222;
+
 }
 
 .splitter-vertical {
     width: 8px;
     height: 100%;
-    background-color: red;
+
     position: absolute;
     top: 5px;
     bottom: 5px;
@@ -81,6 +89,7 @@ body {
 #editorContainer {
     height: 100%;
     width: 100%;
+    background-color: #444;
     box-sizing: border-box;
 }
 
