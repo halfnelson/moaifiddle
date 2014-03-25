@@ -25,12 +25,12 @@
             <input type="submit">
         </form>
         </div>
-        <div class="splitter-vertical" style="left: {{splitter.location}}%" on-mousedown="splitter-begin-move"   ></div>
+        <div class="splitter-vertical" style="left: {{splitter.location}}%" on-mousedown="splitter-begin-move" data-splitter="splitter"   ></div>
         <div class="resizable player-wrapper" style='width: {{ 100 - splitter.location }}%'>
         <div class="result-container">
-            <iframe name="result" id="result" style='pointer-events: {{ splitter.dragging ? "none" : "auto" }}; height: {{hsplitter.location}}% ' >
+            <iframe name="result" id="result" style='pointer-events: {{ currentSplitter.dragging ? "none" : "auto" }}; height: {{hsplitter.location}}% ' >
             </iframe>
-            <div class="splitter-horizontal" style="top: {{hsplitter.location}}%"></div>
+            <div class="splitter-horizontal" style="top: {{hsplitter.location}}%" on-mousedown="splitter-begin-move" data-splitter="hsplitter"></div>
             <div id="player-console" style="height: {{100 - hsplitter.location }}%"></div>
            </div>
         </div>
@@ -47,26 +47,38 @@
         data: {
             hsplitter: {
                 location: 50,
-                dragging: false
+                direction: "h"
             },
             splitter: {
                 location: 50,
-                dragging: false
-            }
+                direction: "v"
+            },
+            currentSplitter: {}
         },
         complete: function() {
-            this.splitter = $(this.el).find(".splitter-vertical").first();
+
         }
     });
     ractive.on("splitter-begin-move", function(event) {
-        this.set('splitter.dragging', true);
+         this.set('currentSplitter.name', event.node.getAttribute( 'data-splitter' ));
+        this.set('currentSplitter.dragging',true);
     });
+
     ractive.on("splitter-end-move", function(event) {
-        this.set('splitter.dragging', false);
+        this.set('currentSplitter.dragging', false);
     });
+
     ractive.on("splitter-move", function(event) {
-        if (!this.get('splitter.dragging')) return;
-        this.set('splitter.location',(event.original.x/$(window).width()) *100);
+
+        if (!this.get('currentSplitter.dragging')) return;
+        var splitter = this.get('currentSplitter.name');
+
+
+        if (this.get(splitter+'.direction') == "v") {
+            this.set(splitter+'.location',(event.original.pageX/$(window).width()) *100);
+        } else {
+            this.set(splitter+'.location',((event.original.layerY||event.original.offsetY) /$(event.original.target).parent().height()) *100);
+        }
     });
 
 

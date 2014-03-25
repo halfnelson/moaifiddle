@@ -24,10 +24,10 @@
     box-sizing: border-box;
     position: absolute;
     width:100%;
-    top: 0;
+    top: -4px;
 }
 .splitter-horizontal {
-    height: 10px;
+    height: 8px;
     width: 100%;
     background-color: blue;
     position: absolute;
@@ -37,25 +37,26 @@
 
 .result-container {
     width: 100%;
-    height: 100%;
-    margin: 10px;
+    position:absolute;
+    top: 4px;
+    bottom: 4px;
 }
 
 #player-console {
     width: 100%;
     position: absolute;
-    bottom: 0;
+    bottom: -4px;
 }
 
 .splitter-vertical {
-    width: 10px;
+    width: 8px;
     height: 100%;
     background-color: red;
     position: absolute;
     top: 5px;
     bottom: 5px;
     cursor: col-resize;
-    margin-left:-5px;
+    margin-left:-4px;
 }
 
 body,html {
