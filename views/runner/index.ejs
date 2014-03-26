@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <title>MoaiJS</title>
-    <link href="/moaijs/css/style.css" rel="stylesheet">
+    <link href="/stylesheets/player.css" rel="stylesheet">
 </head>
 <body>
 <style>
@@ -22,7 +22,12 @@
         box-sizing: border-box;
         border: 1px solid #666;
         background-color: #222;
-
+        color: #CCC;
+        padding: 3px;
+        overflow-y: auto;
+    }
+    #player-console pre {
+        margin: 4px 0;
     }
     .splitter-horizontal {
         height: 8px;
@@ -69,7 +74,7 @@
 
 <!-- we need these -->
 <script type="text/javascript" src="/moaijs/howler.js"></script>
-<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="/vendor/jquery-ui/js/jquery-1.10.2.js"></script>
 <!-- the app -->
 <script type="text/javascript" src="/moaijs/moaijs.js"></script>
 <script type="text/javascript" src="/moaijs/moaihost.js"></script>
@@ -97,9 +102,10 @@
                 cons.appendChild(line);
             };
             <% if(fiddle) { %>
-            player.runString(b64.base64ToStr("<%= fiddle %>"));
+            player.runString(b64.base64ToStr(decodeURIComponent("<%- encodeURIComponent(fiddle) %>")));
             <% } else { %>
-            player.onPrint("MoaiJS Ready....");
+            player.onPrint("MoaiJS Player v1.01");
+            player.onPrint("Ready....");
             <% }%>
         }
     });
@@ -124,8 +130,6 @@
     });
 
     ractive.on("splitter-move", function(event) {
-
-        console.log(event.original.offsetY, event.original.pageY, event.original.clientY,$(event.original.target).parent()[0].offsetTop ,event.original.y + $(event.original.target).parent()[0].offsetLeft);
         if (!this.get('currentSplitter.dragging')) return;
         var splitter = this.get('currentSplitter.name');
         var container = this.get('currentSplitter.container');

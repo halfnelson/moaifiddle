@@ -90,7 +90,51 @@ body {
     margin: 0;
     width: 100%;
     background-color: #111;
+    color: #ccc;
 }
 
+#editorNav .buttons {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
 
+#editorNav .buttons li {
+    line-height: 100%;
+    min-width:100px;
+    display: block;
+    float:left;
+    height: 50px;
+    text-align: center;
+
+}
+
+#editorNav .buttons li a {
+    width: 100%;
+    text-decoration: none;
+    line-height: 50px;
+    padding: 0 10px;
+    height: 100%;
+    display: block;
+
+    cursor: pointer;
+}
+#editorNav .buttons li a:hover {
+
+    background-color: #222;
+
+}
+
+.ace_scrollbar-v::-webkit-scrollbar {
+    width: 10px;
+    height: 10px
+}
+
+.ace_scrollbar-v::-webkit-scrollbar-track {
+    background: none
+}
+
+.ace_scrollbar-v::-webkit-scrollbar-thumb {
+    border-right: 5px solid transparent
+}
 

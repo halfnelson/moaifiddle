@@ -11,12 +11,16 @@
 
 <script id="editorTemplate" type="text/ractive">
     <div id="editorNav">
+        <ul class="buttons">
+            <li><a on-click="play">Play</a></li>
+        </ul>
     </div>
     <div class="cols" on-mousemove="splitter-move" on-mouseup="splitter-end-move">
        <div class="resizable code-wrapper" style='width: {{ splitter.location }}%'>
-       <form method="post" action="/run" target="result">
+       <form id="runForm" method="post" action="/run" target="result">
             <input type="hidden" value="<%= slug %>" name="slug">
             <input type="hidden" value="<%= revision %>" name="revision">
+            <input type="hidden" value="" name="fiddle" id="fiddletext">
             <div id="editor"><%= fiddle %></div>
         </form>
         </div>
@@ -53,6 +57,7 @@
             var editor = ace.edit("editor");
             editor.setTheme("ace/theme/monokai");
             editor.getSession().setMode("ace/mode/lua");
+            editor.getSession().setUseWrapMode(true);
             this.editor = editor;
         }
     });
@@ -76,9 +81,13 @@
         } )
     });
 
-    ractive.on("splitter-move", function(event) {
+    ractive.on("play", function(event) {
+        var fiddle = this.editor.getSession().getValue();
+        $(this.el).find('#fiddletext').val(fiddle);
+        $(this.el).find('#runForm').first().submit();
 
-        console.log(event.original.offsetY, event.original.pageY, event.original.clientY,$(event.original.target).parent()[0].offsetTop ,event.original.y + $(event.original.target).parent()[0].offsetLeft);
+    });
+    ractive.on("splitter-move", function(event) {
         if (!this.get('currentSplitter.dragging')) return;
         var splitter = this.get('currentSplitter.name');
         var container = this.get('currentSplitter.container');
@@ -91,6 +100,7 @@
             this.set(splitter+'.location',((event.original.pageY - offsetTop ) /container.outerHeight()) *100);
         }
     });
+
 
 
 
