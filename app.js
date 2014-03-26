@@ -41,6 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.router);
 
 app.post('/run', runner.index);
+app.get('/run', runner.index);
 app.get('/:slug/:revision', editor.show);
 app.get('/:slug', editor.show);
 app.get('/', editor.show);

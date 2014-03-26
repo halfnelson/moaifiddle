@@ -2,10 +2,8 @@
 <html>
 <head>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link href="/vendor/jquery-ui/css/smoothness/jquery-ui-1.10.4.custom.css" rel="stylesheet">
     <script src="/vendor/jquery-ui/js/jquery-1.10.2.js"></script>
-    <script src="/vendor/jquery-ui/js/jquery-ui-1.10.4.custom.js"></script>
-
+    <script src="/vendor/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
 
@@ -19,19 +17,15 @@
        <form method="post" action="/run" target="result">
             <input type="hidden" value="<%= slug %>" name="slug">
             <input type="hidden" value="<%= revision %>" name="revision">
-            <textarea name="fiddle">
-                <%= fiddle %>
-            </textarea>
-            <input type="submit">
+            <div id="editor"><%= fiddle %></div>
         </form>
         </div>
         <div class="splitter-vertical" style="left: {{splitter.location}}%" on-mousedown="splitter-begin-move" data-splitter="splitter"   ></div>
         <div class="resizable player-wrapper" style='width: {{ 100 - splitter.location }}%'>
         <div class="result-container">
-            <iframe name="result" id="result" style='pointer-events: {{ currentSplitter.dragging ? "none" : "auto" }}; height: {{hsplitter.location}}% ' >
+            <iframe name="result" id="result" src="/run" style='pointer-events: {{ currentSplitter.dragging ? "none" : "auto" }}; ' >
             </iframe>
-            <div class="splitter-horizontal" style="top: {{hsplitter.location}}%" on-mousedown="splitter-begin-move" data-splitter="hsplitter"></div>
-            <div id="player-console" style="height: {{100 - hsplitter.location }}%"></div>
+
            </div>
         </div>
     </div>
@@ -56,7 +50,10 @@
             currentSplitter: {}
         },
         complete: function() {
-
+            var editor = ace.edit("editor");
+            editor.setTheme("ace/theme/monokai");
+            editor.getSession().setMode("ace/mode/lua");
+            this.editor = editor;
         }
     });
     ractive.on("splitter-begin-move", function(event) {

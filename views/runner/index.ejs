@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>MoaiJS</title>
+    <link href="/moaijs/css/style.css" rel="stylesheet">
+</head>
+<body>
+<style>
+    body,html {
+        height: 100%;
+    }
+
+    body {
+        padding: 0; margin: 0;
+    }
+    #player-console {
+        width: 100%;
+        position: absolute;
+        bottom: -4px;
+        box-sizing: border-box;
+        border: 1px solid #666;
+        background-color: #222;
+
+    }
+    .splitter-horizontal {
+        height: 8px;
+        width: 100%;
+        position: absolute;
+        cursor: row-resize;
+        margin-top: -5px;
+    }
+    #moaiplayer {
+        overflow: auto;
+        border:1px solid #666;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        position: absolute;
+        width:100%;
+        top: -4px;
+        background-color: #222;
+    }
+    #playerRoot, #player-container {
+        margin:0;
+        padding:0;
+        position:absolute;
+        top:0;
+        left:0;
+        bottom:0;
+        right:0
+    }
+    #playerRoot {
+        top: 4px;
+        bottom: 4px;
+    }
+</style>
+
+<div id="playerRoot"></div>
+
+<script id="playerTemplate" type="text/ractive">
+<div id="player-container" on-mousemove="splitter-move" on-mouseup="splitter-end-move">
+    <div id="moaiplayer" class="moai-player" data-title="Result" data-ram="48" style="height: {{hsplitter.location}}%" ></div>
+    <div class="splitter-horizontal" style="top: {{hsplitter.location}}%" on-mousedown="splitter-begin-move" data-splitter="hsplitter"></div>
+    <div id="player-console" style="height: {{100 - hsplitter.location }}%"></div>
+</div>
+</script>
+
+<!-- we need these -->
+<script type="text/javascript" src="/moaijs/howler.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<!-- the app -->
+<script type="text/javascript" src="/moaijs/moaijs.js"></script>
+<script type="text/javascript" src="/moaijs/moaihost.js"></script>
+<script src="/javascripts/b64.js"></script>
+<script src="/vendor/ractive.js"></script>
+
+<script>
+
+    var ractive = new Ractive({
+        el: 'playerRoot',
+        template: '#playerTemplate',
+        data: {
+            hsplitter: {
+                location: 50,
+                direction: "h"
+            },
+            currentSplitter: {}
+        },
+        complete: function() {
+            var player = new MoaiPlayer($("#moaiplayer"));
+            var cons = document.getElementById("player-console");
+            player.onPrint = function(x) {
+                var line = document.createElement('pre');
+                line.textContent = x;
+                cons.appendChild(line);
+            };
+            <% if(fiddle) { %>
+            player.runString(b64.base64ToStr("<%= fiddle %>"));
+            <% } else { %>
+            player.onPrint("MoaiJS Ready....");
+            <% }%>
+        }
+    });
+    ractive.on("splitter-begin-move", function(event) {
+        this.set('currentSplitter.name', event.node.getAttribute( 'data-splitter' ));
+        this.set('currentSplitter.container', $(event.node).parent() );
+        this.set('currentSplitter.dragging',true);
+        $('body').css({ '-webkit-user-select': 'none',
+            '-moz-user-select': '-moz-none',
+            '-ms-user-select': 'none',
+            'user-select': 'none'
+        } )
+    });
+
+    ractive.on("splitter-end-move", function(event) {
+        this.set('currentSplitter.dragging', false);
+        $('body').css({ '-webkit-user-select': 'initial',
+            '-moz-user-select': 'initial',
+            '-ms-user-select': 'initial',
+            'user-select': 'initial'
+        } )
+    });
+
+    ractive.on("splitter-move", function(event) {
+
+        console.log(event.original.offsetY, event.original.pageY, event.original.clientY,$(event.original.target).parent()[0].offsetTop ,event.original.y + $(event.original.target).parent()[0].offsetLeft);
+        if (!this.get('currentSplitter.dragging')) return;
+        var splitter = this.get('currentSplitter.name');
+        var container = this.get('currentSplitter.container');
+        var offsetTop = container.offset().top;
+        var offsetLeft = container.offset().left;
+
+        if (this.get(splitter+'.direction') == "v") {
+            this.set(splitter+'.location',((event.original.pageX - offsetLeft) /container.outerWidth()) *100);
+        } else {
+            this.set(splitter+'.location',((event.original.pageY - offsetTop ) /container.outerHeight()) *100);
+        }
+    });
+
+
+
+
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
