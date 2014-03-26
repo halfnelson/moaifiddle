@@ -27,8 +27,13 @@
         <div class="splitter-vertical" style="left: {{splitter.location}}%" on-mousedown="splitter-begin-move" data-splitter="splitter"   ></div>
         <div class="resizable player-wrapper" style='width: {{ 100 - splitter.location }}%'>
         <div class="result-container">
-            <iframe name="result" id="result" src="/run" style='pointer-events: {{ currentSplitter.dragging ? "none" : "auto" }}; ' >
+        <div id="player-container" on-mousemove="splitter-move" on-mouseup="splitter-end-move">
+            <iframe name="result" id="result" src="/run" style='pointer-events: {{ currentSplitter.dragging ? "none" : "auto" }}; height: {{hsplitter.location}}% ' >
             </iframe>
+            <div class="splitter-horizontal" style="top: {{hsplitter.location}}%" on-mousedown="splitter-begin-move" data-splitter="hsplitter"></div>
+            <div id="player-console" style="height: {{100 - hsplitter.location }}%"></div>
+        </div>
+
 
            </div>
         </div>

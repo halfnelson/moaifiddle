@@ -15,60 +15,12 @@
     body {
         padding: 0; margin: 0;
     }
-    #player-console {
-        width: 100%;
-        position: absolute;
-        bottom: -4px;
-        box-sizing: border-box;
-        border: 1px solid #666;
-        background-color: #222;
-        color: #CCC;
-        padding: 3px;
-        overflow-y: auto;
-    }
-    #player-console pre {
-        margin: 4px 0;
-    }
-    .splitter-horizontal {
-        height: 8px;
-        width: 100%;
-        position: absolute;
-        cursor: row-resize;
-        margin-top: -5px;
-    }
-    #moaiplayer {
-        overflow: auto;
-        border:1px solid #666;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        position: absolute;
-        width:100%;
-        top: -4px;
-        background-color: #222;
-    }
-    #playerRoot, #player-container {
-        margin:0;
-        padding:0;
-        position:absolute;
-        top:0;
-        left:0;
-        bottom:0;
-        right:0
-    }
-    #playerRoot {
-        top: 4px;
-        bottom: 4px;
-    }
 </style>
 
-<div id="playerRoot"></div>
-
 <script id="playerTemplate" type="text/ractive">
-<div id="player-container" on-mousemove="splitter-move" on-mouseup="splitter-end-move">
-    <div id="moaiplayer" class="moai-player" data-title="Result" data-ram="48" style="height: {{hsplitter.location}}%" ></div>
-    <div class="splitter-horizontal" style="top: {{hsplitter.location}}%" on-mousedown="splitter-begin-move" data-splitter="hsplitter"></div>
-    <div id="player-console" style="height: {{100 - hsplitter.location }}%"></div>
+
+    <div id="moaiplayer" class="moai-player" data-title="Result" data-ram="48" ></div>
+
 </div>
 </script>
 
@@ -95,11 +47,12 @@
         },
         complete: function() {
             var player = new MoaiPlayer($("#moaiplayer"));
-            var cons = document.getElementById("player-console");
+            var cons = parent.document.getElementById("player-console");
             player.onPrint = function(x) {
                 var line = document.createElement('pre');
                 line.textContent = x;
                 cons.appendChild(line);
+               // console.log(x);
             };
             <% if(fiddle) { %>
             player.runString(b64.base64ToStr(decodeURIComponent("<%- encodeURIComponent(fiddle) %>")));
