@@ -696,20 +696,25 @@ function MoaiPlayer(element) {
 		el.find('.moai-canvas-wrapper').first().toggleClass("portrait", (height > width));
 	}
 
-	function onError(err) {
+
+
+	this.onError = function(err) {
 		console.log("ERROR: ",err);
-	}
+	};
 
     this.onPrint = function(x) {
         console.log(x);
-    }
+    };
 
     function onPrint(x) {
         this.onPrint(x);
     }
 
+    function onError(x) {
+        this.onError(x);
+    }
 	onTitleChange(title);
-	this.moai = new MoaiJS(canvasEl[0],ram*1024*1024,onTitleChange,onStatusChange,onError,onPrint.bind(this), onResolutionChange);
+	this.moai = new MoaiJS(canvasEl[0],ram*1024*1024,onTitleChange,onStatusChange,onError.bind(this),onPrint.bind(this), onResolutionChange);
 }
 
 MoaiPlayer.prototype.run = function() {

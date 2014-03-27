@@ -48,6 +48,7 @@ app.get('/', editor.show);
 
 app.post('/:slug/:revision', editor.save);
 app.post('/:slug', editor.save);
+app.post('/',editor.save);
 
 
 /// catch 404 and forwarding to error handler

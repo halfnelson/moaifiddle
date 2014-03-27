@@ -107,6 +107,10 @@
         background-image: -ms-linear-gradient(top, #f1a165, #f36d0a);
         background-image: -o-linear-gradient(top, #f1a165, #f36d0a);
     }
+
+    pre.red {
+        color: red;
+    }
 </style>
 
 <div id="playerRoot">
@@ -137,7 +141,8 @@
 <script src="/vendor/jquery-ui/js/jquery-1.10.2.js"></script>
 <!-- the app -->
 <script>setProgress('98') </script>
-<script type="text/javascript" src="/moaijs/moaijs.js"></script>
+<!-- shared moaijs instance -->
+<script>window.CreateMoaiRuntime = window.parent.CreateMoaiRuntime</script>
 <script>setProgress('100') </script>
 <script type="text/javascript" src="/moaijs/moaihost.js"></script>
 <script src="/javascripts/b64.js"></script>
@@ -150,63 +155,37 @@
         el: 'playerRoot',
         template: '#playerTemplate',
         data: {
-            hsplitter: {
-                location: 50,
-                direction: "h"
-            },
-            currentSplitter: {}
+
         },
         complete: function() {
             var player = new MoaiPlayer($("#moaiplayer"));
-            var cons = parent.document.getElementById("player-console");
+            this.player = player;
+          //  var cons = parent.document.getElementById("player-console");
             player.onPrint = function(x) {
+              //  var line = document.createElement('pre');
+              //  line.textContent = x;
+              //  cons.appendChild(line);
+                parent.consoleWrite(x);
+            };
+
+            player.onError = function(x) {
                 var line = document.createElement('pre');
+                line.className="red";
                 line.textContent = x;
                 cons.appendChild(line);
-               // console.log(x);
             };
+
             <% if(fiddle) { %>
             player.runString(b64.base64ToStr(decodeURIComponent("<%- encodeURIComponent(fiddle) %>")));
             <% } else { %>
-            player.onPrint("MoaiJS Player v1.01");
-            player.onPrint("Ready....");
+            player.runString('print("Player Ready...")');
             <% }%>
         }
     });
-    ractive.on("splitter-begin-move", function(event) {
-        this.set('currentSplitter.name', event.node.getAttribute( 'data-splitter' ));
-        this.set('currentSplitter.container', $(event.node).parent() );
-        this.set('currentSplitter.dragging',true);
-        $('body').css({ '-webkit-user-select': 'none',
-            '-moz-user-select': '-moz-none',
-            '-ms-user-select': 'none',
-            'user-select': 'none'
-        } )
-    });
 
-    ractive.on("splitter-end-move", function(event) {
-        this.set('currentSplitter.dragging', false);
-        $('body').css({ '-webkit-user-select': 'initial',
-            '-moz-user-select': 'initial',
-            '-ms-user-select': 'initial',
-            'user-select': 'initial'
-        } )
-    });
-
-    ractive.on("splitter-move", function(event) {
-        if (!this.get('currentSplitter.dragging')) return;
-        var splitter = this.get('currentSplitter.name');
-        var container = this.get('currentSplitter.container');
-        var offsetTop = container.offset().top;
-        var offsetLeft = container.offset().left;
-
-        if (this.get(splitter+'.direction') == "v") {
-            this.set(splitter+'.location',((event.original.pageX - offsetLeft) /container.outerWidth()) *100);
-        } else {
-            this.set(splitter+'.location',((event.original.pageY - offsetTop ) /container.outerHeight()) *100);
-        }
-    });
-
+    function sendCommand(x) {
+        ractive.player.runString(x);
+    }
 
 
 

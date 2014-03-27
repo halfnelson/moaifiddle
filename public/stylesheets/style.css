@@ -170,3 +170,15 @@ body {
     bottom:4px;
     right:0
 }
+#player-console .cmd {
+    background-color: #2a2a2d;
+}
+#player-console .cmd .prompt {
+    color: lightseagreen;
+}
+#editor {
+    background-color: #222;
+}
+#editor .ace_gutter {
+    background-color: #2a2a2d;
+}
