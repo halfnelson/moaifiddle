@@ -15,22 +15,133 @@
     body {
         padding: 0; margin: 0;
     }
+
+    #playerRoot {
+        position:absolute;
+        top:0;
+        left:0;
+        bottom:0;
+        right:0;
+    }
+    /* thanks to http://css-tricks.com/css3-progress-bars/ */
+    .meter {
+        height: 10px;  /* Can be anything */
+        position: absolute;
+        margin-top:-10px;
+        top:50%;
+        left:20%;
+        right:20%;
+
+
+        background: #555;
+        -moz-border-radius: 25px;
+        -webkit-border-radius: 25px;
+        border-radius: 25px;
+        padding: 1px;
+        -webkit-box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
+        -moz-box-shadow   : inset 0 -1px 1px rgba(255,255,255,0.3);
+        box-shadow        : inset 0 -1px 1px rgba(255,255,255,0.3);
+    }
+
+    .meter > span {
+        display: block;
+        height: 100%;
+        -webkit-border-top-right-radius: 8px;
+        -webkit-border-bottom-right-radius: 8px;
+        -moz-border-radius-topright: 8px;
+        -moz-border-radius-bottomright: 8px;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        -webkit-border-top-left-radius: 20px;
+        -webkit-border-bottom-left-radius: 20px;
+        -moz-border-radius-topleft: 20px;
+        -moz-border-radius-bottomleft: 20px;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+        background-color: rgb(43,194,83);
+        background-image: -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(43,194,83)),
+            color-stop(1, rgb(84,240,84))
+        );
+        background-image: -webkit-linear-gradient(
+            center bottom,
+            rgb(43,194,83) 37%,
+            rgb(84,240,84) 69%
+        );
+        background-image: -moz-linear-gradient(
+            center bottom,
+            rgb(43,194,83) 37%,
+            rgb(84,240,84) 69%
+        );
+        background-image: -ms-linear-gradient(
+            center bottom,
+            rgb(43,194,83) 37%,
+            rgb(84,240,84) 69%
+        );
+        background-image: -o-linear-gradient(
+            center bottom,
+            rgb(43,194,83) 37%,
+            rgb(84,240,84) 69%
+        );
+        -webkit-box-shadow:
+            inset 0 2px 9px  rgba(255,255,255,0.3),
+            inset 0 -2px 6px rgba(0,0,0,0.4);
+        -moz-box-shadow:
+            inset 0 2px 9px  rgba(255,255,255,0.3),
+            inset 0 -2px 6px rgba(0,0,0,0.4);
+        position: relative;
+        overflow: hidden;
+
+        -webkit-transition:width 1s, opacity 1s;
+        transition:width 1s, opacity 1s;
+    }
+
+    .orange > span {
+        background-color: #f1a165;
+        background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f1a165),color-stop(1, #f36d0a));
+        background-image: -webkit-linear-gradient(top, #f1a165, #f36d0a);
+        background-image: -moz-linear-gradient(top, #f1a165, #f36d0a);
+        background-image: -ms-linear-gradient(top, #f1a165, #f36d0a);
+        background-image: -o-linear-gradient(top, #f1a165, #f36d0a);
+    }
 </style>
 
-<script id="playerTemplate" type="text/ractive">
-
-    <div id="moaiplayer" class="moai-player" data-title="Result" data-ram="48" ></div>
+<div id="playerRoot">
+    <div  class="meter orange">
+        <span id="progressBar" style="width: 1%"></span>
+    </div>
 
 </div>
+<script id="playerTemplate" type="text/ractive">
+    <div id="moaiplayer" class="moai-player" data-title="Result" data-ram="48" ></div>
 </script>
 
+<script>
+    var pb = document.getElementById('progressBar');
+    function setProgress(prog) {
+        if (prog == '100') {
+            pb.parentNode.style.opacity = 0;
+        }
+        pb.style.width = prog+'%';
+    }
+
+</script>
 <!-- we need these -->
+<script>setProgress('10') </script>
 <script type="text/javascript" src="/moaijs/howler.js"></script>
+<script>setProgress('30') </script>
+
 <script src="/vendor/jquery-ui/js/jquery-1.10.2.js"></script>
 <!-- the app -->
+<script>setProgress('98') </script>
 <script type="text/javascript" src="/moaijs/moaijs.js"></script>
+<script>setProgress('100') </script>
 <script type="text/javascript" src="/moaijs/moaihost.js"></script>
 <script src="/javascripts/b64.js"></script>
+
 <script src="/vendor/ractive.js"></script>
 
 <script>
