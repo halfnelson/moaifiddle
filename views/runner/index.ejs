@@ -160,26 +160,22 @@
         complete: function() {
             var player = new MoaiPlayer($("#moaiplayer"));
             this.player = player;
-          //  var cons = parent.document.getElementById("player-console");
             player.onPrint = function(x) {
-              //  var line = document.createElement('pre');
-              //  line.textContent = x;
-              //  cons.appendChild(line);
                 parent.consoleWrite(x);
             };
 
             player.onError = function(x) {
-                var line = document.createElement('pre');
-                line.className="red";
-                line.textContent = x;
-                cons.appendChild(line);
+               parent.consoleError(x);
             };
-
+            try {
             <% if(fiddle) { %>
             player.runString(b64.base64ToStr(decodeURIComponent("<%- encodeURIComponent(fiddle) %>")));
             <% } else { %>
             player.runString('print("Player Ready...")');
             <% }%>
+            } catch (e) {
+                player.onError(e)
+            }
         }
     });
 

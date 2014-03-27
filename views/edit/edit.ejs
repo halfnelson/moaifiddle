@@ -19,7 +19,7 @@
             <li><a on-click="save">Save</a></li>
         </ul>
     </div>
-    <div class="cols" on-mousemove="splitter-move" on-mouseup="splitter-end-move">
+    <div class="cols" on-mousemove="splitter-move" on-mouseup="splitter-end-move" style="left: {{ filelist.visible ? 209 : 9}}px">
        <div class="resizable code-wrapper" style='width: {{ splitter.location }}%'>
        <form id="runForm" method="post" action="/run" target="result">
             <input type="hidden" value="<%= fiddle.slug || "" %>" name="slug">
@@ -47,11 +47,15 @@
 <script type="text/javascript" src="/moaijs/moaijs.js"></script>
 <script src="/vendor/ractive.js"></script>
 
-<script>
+<script type="text/javascript">
     var ractive = new Ractive({
         el: 'editorContainer',
         template: '#editorTemplate',
         data: {
+            filelist: {
+                visible: true,
+                width: 209
+            },
             hsplitter: {
                 location: 50,
                 direction: "h"
@@ -65,7 +69,6 @@
         complete: function() {
             //bind some vars
             this.slug = $('#runForm').find('input[name="slug"]').val();
-
 
             var editor = ace.edit("editor");
             editor.setTheme("ace/theme/monokai");
@@ -153,10 +156,6 @@
 
 
 function consoleWrite(x) {
-    //var cons = parent.document.getElementById("player-console");
-   // var line = document.createElement('pre');
-   // line.textContent = x;
-    //cons.appendChild(line);
     ractive.console.echo(x);
 }
 
