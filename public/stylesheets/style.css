@@ -186,11 +186,21 @@ body {
 #fileBrowser {
     position: absolute;
     left: 4px;
-
+    color: #ccc;
     top: 55px;
     bottom: 4px;
     background-color: #2a2a2d;
     border: 1px solid #666;
     width: 194px;
     box-sizing:border-box;
+}
+
+#fileBrowser .dir i.fa:before {
+    content: "\f0dd";
+}
+
+#fileBrowser .dir.closed i.fa:before {
+
+    content: "\f0da";
+
 }
