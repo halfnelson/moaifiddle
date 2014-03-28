@@ -10,7 +10,9 @@
 </head>
 <body>
 
+
 <div id="editorContainer"></div>
+
 
 <script id="editorTemplate" type="text/ractive">
     <div id="editorNav">
@@ -19,6 +21,7 @@
             <li><a on-click="save">Save</a></li>
         </ul>
     </div>
+    <div id="fileBrowserContainer"></div>
     <div class="cols" on-mousemove="splitter-move" on-mouseup="splitter-end-move" style="left: {{ filelist.visible ? 209 : 9}}px">
        <div class="resizable code-wrapper" style='width: {{ splitter.location }}%'>
        <form id="runForm" method="post" action="/run" target="result">
@@ -44,8 +47,11 @@
     </div>
 </script>
 
+
 <script type="text/javascript" src="/moaijs/moaijs.js"></script>
 <script src="/vendor/ractive.js"></script>
+
+<% include filebrowser.ejs %>
 
 <script type="text/javascript">
     var ractive = new Ractive({
@@ -89,6 +95,8 @@
 
             this.console.disable(); //it grabs focus
             this.editor.focus();
+
+            this.fileBrowser = createFileBrowser();
         }
     });
     ractive.on("terminal-input",
@@ -165,6 +173,7 @@ function consoleError(x) {
 
 
 </script>
+
 
 
 </body>

@@ -182,3 +182,15 @@ body {
 #editor .ace_gutter {
     background-color: #2a2a2d;
 }
+
+#fileBrowser {
+    position: absolute;
+    left: 4px;
+
+    top: 55px;
+    bottom: 4px;
+    background-color: #2a2a2d;
+    border: 1px solid #666;
+    width: 194px;
+    box-sizing:border-box;
+}

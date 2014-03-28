@@ -1,0 +1,24 @@
+<script id="fileBrowserTemplate" type="text/ractive">
+    <div id="fileBrowser">
+        <h1>{{message}}</h1>
+    </div>
+</script>
+
+<script>
+  function createFileBrowser() {
+      var fileBrowser = new Ractive({
+          el: 'fileBrowserContainer',
+          template: '#fileBrowserTemplate',
+          data: {
+              message: "hello world"
+          }
+      });
+
+      return fileBrowser;
+
+
+  }
+
+
+
+</script>
