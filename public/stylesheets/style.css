@@ -199,8 +199,19 @@ body {
     content: "\f0dd";
 }
 
+#fileBrowser ul {
+    list-style: none;
+    padding:0;
+    margin-left: 10px;
+    margin-top:0px;
+    font-size:14px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+}
+
+#fileBrowser ul li {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
 #fileBrowser .dir.closed i.fa:before {
-
     content: "\f0da";
-
 }

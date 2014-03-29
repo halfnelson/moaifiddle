@@ -2,7 +2,7 @@
     <div id="fileBrowser">
         <ul>
          {{# fileList( files ) }}
-             <li style="padding-left: {{depth * 5}}px; display:{{ visible(parent) ? "":"none" }}; "
+             <li style="padding-left: {{depth * 5}}px; display:{{ visible(parent) ? "list-item":"none" }}; "
                  class="{{dir ? "dir" :"file"}} {{closed(fullPath(this)) ? "closed": ""}}"
                  on-click="{{dir ? "toggle": "open"}}" data-path="{{fullPath(this)}}"
                  ><i class="fa"></i> {{name}}</li>
@@ -20,10 +20,9 @@
 
               isClosed: [],
               files: [
-                  { name: "/src/test.lua", contents: "blahblah"},
-                  { name: "/root.lua", contents: "blahblah"},
-                  { name: "/src/sub/test.lua", contents: "blahblah"},
-                  { name: "/src/zed/z.lua", contents: "blahblah" }
+                  {
+                      name: 'loading...'
+                  }
               ],
 
               fullPath: function(fileInfo) {
@@ -52,10 +51,10 @@
                   files = files.sort(function (a, b) {
                       var adirs = a.path;
                       var bdirs = b.path;
-                      var times = Math.min(a.dirs, b.dirs);
+                      var times = Math.min(a.path.length, b.path.length);
                       for (var i = 0; i < times; i++) {
-                          if (a.parts[i] != b.parts[i]) {
-                              return a.parts[i] < b.parts[i] ? -1 : 1;
+                          if (a.path[i] != b.path[i]) {
+                              return a.path[i] < b.path[i] ? -1 : 1;
                           }
                       }
                       if (adirs.length == bdirs.length) {
@@ -89,6 +88,14 @@
                   }
                   return fs;
               }
+          },
+          complete: function() {
+              $.getJSON('/moaijs/moaiapp.rom.json', function(package) {
+                  var files = _(package.files).map(function(f) {return {name: f.filename} });
+                  var closed = _(package.directories).map(function(f) {return "/"+f });
+                  this.set('files',files);
+                  this.set('isClosed',closed);
+              }.bind(this));
           }
       });
       fileBrowser.on("open", function() {console.log("open")});
