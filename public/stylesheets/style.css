@@ -91,6 +91,7 @@ body {
     width: 100%;
     background-color: #111;
     color: #ccc;
+    font-family: sans-serif;
 }
 
 #editorNav .buttons {
@@ -106,7 +107,11 @@ body {
     float:left;
     height: 50px;
     text-align: center;
+    box-sizing:border-box;
+}
 
+#editorNav .buttons li a i.fa {
+    margin-right:6px;
 }
 
 #editorNav .buttons li a {
@@ -116,7 +121,7 @@ body {
     padding: 0 10px;
     height: 100%;
     display: block;
-
+    box-sizing:border-box;
     cursor: pointer;
 }
 #editorNav .buttons li a:hover {

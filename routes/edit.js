@@ -3,6 +3,7 @@ var fiddleRepo = require('../lib/repositories/fiddle_repository');
 var Fiddle = require('../lib/models/fiddle');
 var D = require('d.js');
 var console = require('console');
+var b64 = require('../public/javascripts/b64.js');
 
 var show = function(req, res, next) {
     var slug = req.params.slug;
@@ -17,6 +18,7 @@ var show = function(req, res, next) {
             res.send(404,"No such fiddle");
             return;
         }
+        fiddle.encfiddle = encodeURIComponent(b64.strToBase64(fiddle.fiddle));
         res.render('edit/edit.ejs',{fiddle: fiddle});
     }).error(next);
 };

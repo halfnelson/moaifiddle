@@ -4,7 +4,7 @@
          {{# fileList( files ) }}
              <li style="padding-left: {{depth * 5}}px; display:{{ visible(parent) ? "list-item":"none" }}; "
                  class="{{dir ? "dir" :"file"}} {{closed(fullPath(this)) ? "closed": ""}}"
-                 on-click="{{dir ? "toggle": "open"}}" data-path="{{fullPath(this)}}"
+                  data-path="{{fullPath(this)}}"
                  ><i class="fa"></i> {{name}}</li>
          {{/ end file list}}
         </ul>
@@ -96,11 +96,24 @@
                   this.set('files',files);
                   this.set('isClosed',closed);
               }.bind(this));
+              $("#fileBrowser").on("click", "ul li.dir", function(event) {
+                  this.fire("toggle",event);
+              }.bind(this))
+
           }
       });
       fileBrowser.on("open", function() {console.log("open")});
       fileBrowser.on("toggle", function(event) {
-        var path = event.original.target.getAttribute("data-path");
+
+          var target = $(event.target);
+          if (!target.hasClass("dir")) {
+              target = $(event.target).parents("li.dir").first();
+          }
+          if (!target) return;
+          var path = target.attr("data-path");
+
+
+
         var idx = this.get('isClosed').indexOf(path);
 
         if (idx >= 0) {

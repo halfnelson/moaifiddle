@@ -19,8 +19,8 @@
 <script id="editorTemplate" type="text/ractive">
     <div id="editorNav">
         <ul class="buttons">
-            <li><a on-click="play">Play</a></li>
-            <li><a on-click="save">Save</a></li>
+            <li><a on-click="play"><i class="fa fa-play">&nbsp;</i>Play</a></li>
+            <li><a on-click="save"><i class="fa fa-pencil">&nbsp;</i>{{ slug  ? "Update" : "Save"}}</a></li>
         </ul>
     </div>
     <div id="fileBrowserContainer"></div>
@@ -30,7 +30,8 @@
             <input type="hidden" value="<%= fiddle.slug || "" %>" name="slug">
             <input type="hidden" value="<%= fiddle.revision || "" %>" name="revision">
             <input type="hidden" value="" name="fiddle" id="fiddletext">
-            <div id="editor"><%= fiddle.fiddle || "" %></div>
+            <div id="editor">t</div>
+
         </form>
         </div>
         <div class="splitter-vertical" style="left: {{splitter.location}}%" on-mousedown="splitter-begin-move" data-splitter="splitter"   ></div>
@@ -52,10 +53,16 @@
 
 <script type="text/javascript" src="/moaijs/moaijs.js"></script>
 <script src="/vendor/ractive.js"></script>
+<script src="/javascripts/b64.js"></script>
 
 <% include filebrowser.ejs %>
 
-<script type="text/javascript">
+<script>
+    //global fiddle !!!
+    var fiddle = b64.base64ToStr(decodeURIComponent("<%- fiddle.encfiddle %>"));
+
+</script>
+<script >
     var ractive = new Ractive({
         el: 'editorContainer',
         template: '#editorTemplate',
@@ -77,10 +84,14 @@
         complete: function() {
             //bind some vars
             this.slug = $('#runForm').find('input[name="slug"]').val();
+            this.set("slug",this.slug);
+            $('#editor').text(fiddle);
 
             var editor = ace.edit("editor");
+
             editor.setTheme("ace/theme/monokai");
             var session = editor.getSession();
+
             editor.setShowPrintMargin(false);
             session.setMode("ace/mode/lua");
             session.setUseWrapMode(true);
@@ -125,6 +136,7 @@
             '-ms-user-select': 'initial',
             'user-select': 'initial'
         } )
+        this.editor.resize();
     });
 
     ractive.on("play", function(event) {

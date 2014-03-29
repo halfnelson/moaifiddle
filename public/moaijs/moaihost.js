@@ -478,6 +478,11 @@ MoaiJS.prototype.OpenWindowFunc = function(title,width,height) {
 		this.onResolutionChange(width,height)
 	}
 	this.canvas.style.display = "block";
+
+    if (width > height) {
+        $(this.canvas).parent().addClass("portrait");
+    }
+
 	canvas.width = width;
 	canvas.height = height;
 	this.canvasScale = canvas.width/$(canvas).width();
@@ -555,8 +560,8 @@ MoaiJS.prototype.hostinit = function() {
     console.log("setting working directory");
     this.AKUSetWorkingDirectory('/');
     console.log("setting up canvas");
-    this.AKURunString('MOAIEnvironment.horizontalResolution = '+this.canvas.width);
-    this.AKURunString('MOAIEnvironment.verticalResolution = '+this.canvas.height);
+    this.AKURunString('MOAIEnvironment.horizontalResolution = '+$(this.canvas).parent().width());
+    this.AKURunString('MOAIEnvironment.verticalResolution = '+$(this.canvas).parent().height());
 }
 
 MoaiJS.prototype.runhost = function(mainLua) {
@@ -658,7 +663,7 @@ function MoaiPlayer(element) {
                             <span class="moai-title">MOAI</span><span class="moai-status">Loading..</span> \
                              <div style="clear:both"></div> \
                          </div> \
-                            <div class="moai-canvas-wrapper"><canvas class="moai-canvas" width="960" height="640" tabindex="1"></canvas></div> \
+                            <div class="moai-canvas-wrapper"><canvas class="moai-canvas"  tabindex="1"></canvas></div> \
                         <div class="moai-footer"> \
                             <div class="moai-attrib"> \
                             Made with Moai \
@@ -720,6 +725,10 @@ function MoaiPlayer(element) {
 MoaiPlayer.prototype.run = function() {
     this.moai.loadFileSystem(this.url);
     this.moai.run(this.script);
+}
+
+MoaiPlayer.prototype.loadRom = function(rom) {
+    this.moai.loadFileSystem(rom);
 }
 
 MoaiPlayer.prototype.runString = function(str) {

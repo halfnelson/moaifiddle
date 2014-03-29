@@ -16,7 +16,7 @@
         padding: 0; margin: 0;
     }
 
-    #playerRoot {
+    #playerRoot, #moaiplayer {
         position:absolute;
         top:0;
         left:0;
@@ -167,6 +167,8 @@
             player.onError = function(x) {
                parent.consoleError(x);
             };
+            player.loadRom('/moaijs/moaiapp.rom');
+
             try {
             <% if(fiddle) { %>
             player.runString(b64.base64ToStr(decodeURIComponent("<%- encodeURIComponent(fiddle) %>")));
@@ -180,7 +182,8 @@
     });
 
     function sendCommand(x) {
-        ractive.player.runString(x);
+        ractive.player.moai.getEmscripten();
+        ractive.player.moai.AKURunString(x);
     }
 
 
