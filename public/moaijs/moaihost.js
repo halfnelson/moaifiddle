@@ -479,9 +479,9 @@ MoaiJS.prototype.OpenWindowFunc = function(title,width,height) {
 	}
 	this.canvas.style.display = "block";
 
-    if (width > height) {
-        $(this.canvas).parent().addClass("portrait");
-    }
+   //if (width > height) {
+  //      $(this.canvas).parent().addClass("portrait");
+   // }
 
 	canvas.width = width;
 	canvas.height = height;
@@ -536,14 +536,14 @@ MoaiJS.prototype.startUpdates = function() {
 	if (this.moaiInterval) {
 		window.clearInterval(this.moaiInterval);
 	}
-	this.moaiInverval = window.setInterval( this.updateloop.bind(this), step*1000);
+	this.moaiInterval = window.setInterval( this.updateloop.bind(this), step*1000);
 }
 
 MoaiJS.prototype.stopUpdates = function() {
 	if (this.moaiInterval) {
 		window.clearInterval(this.moaiInterval);
 	}
-	this.moaiInverval = null;
+	this.moaiInterval = null;
 }
 
 MoaiJS.prototype.pause = function() {
@@ -665,6 +665,7 @@ function MoaiPlayer(element) {
                          </div> \
                             <div class="moai-canvas-wrapper"><canvas class="moai-canvas"  tabindex="1"></canvas></div> \
                         <div class="moai-footer"> \
+                          <i id="moai-pause" class="fa fa-pause">&nbsp;</i>    \
                             <div class="moai-attrib"> \
                             Made with Moai \
                             www.getmoai.com \
@@ -680,13 +681,26 @@ function MoaiPlayer(element) {
 	var statusEl = el.find(".moai-status").first();
 	var canvasEl = el.find(".moai-canvas").first();
 	var canvasWrapperEl = el.find(".moai-canvas-wrapper").first();
+
+    var pause = el.find("#moai-pause").first();
 	//get settings
 	this.url = el.attr('data-url');
 	this.script = el.attr('data-script') || 'main.lua';
 	var ram = parseInt(el.attr('data-ram') || "48" ,10);
 	var title = el.attr('data-title') || 'Moai Player';
 
+    var paused= false;
 
+    pause.on("click",function() {
+        paused= !paused;
+        if (paused) {
+            this.pause();
+            pause.addClass("paused")
+        } else {
+            this.unpause();
+            pause.removeClass("paused");
+        }
+    }.bind(this));
 
 	function onTitleChange(title) {
 		titleEl.html(title);
@@ -741,11 +755,11 @@ MoaiPlayer.prototype.stop = function() {
 }
 
 MoaiPlayer.prototype.pause = function() {
-	
+	this.moai.pause();
 }
 
 MoaiPlayer.prototype.unpause = function() {
-	
+    this.moai.unpause();
 }
 
 
