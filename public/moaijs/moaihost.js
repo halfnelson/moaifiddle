@@ -656,14 +656,15 @@ return MoaiJS
 
 //assume Jquery
 
-function MoaiPlayer(element) {
+function MoaiPlayer(element, skipTemplate) {
 	var el = $(element)
 	var template = '<div class="moai-window"> \
                          <div class="moai-header"> \
                             <span class="moai-title">MOAI</span><span class="moai-status">Loading..</span> \
                              <div style="clear:both"></div> \
                          </div> \
-                            <div class="moai-canvas-wrapper"><canvas class="moai-canvas"  tabindex="1"></canvas></div> \
+                            <div class="moai-info"></div>    \
+                            <div class="moai-canvas-wrapper" style="display:none"><canvas class="moai-canvas"  tabindex="1"></canvas></div> \
                         <div class="moai-footer"> \
                           <i id="moai-pause" class="fa fa-pause">&nbsp;</i>    \
                             <div class="moai-attrib"> \
@@ -674,8 +675,18 @@ function MoaiPlayer(element) {
                         </div> \
                     </div>';
 
-    el.html(template);
+    //inject our original element contents into the fiddle-inf
 
+
+    var oldcontent = el.html();
+    var infoEl;
+    if (!skipTemplate) {
+        el.html(template);
+         infoEl = el.find(".moai-info");
+        infoEl.html(oldcontent);
+    } else {
+         infoEl = el.find(".moai-info");
+    }
 
 	var titleEl = el.find(".moai-title").first();
 	var statusEl = el.find(".moai-status").first();
@@ -715,8 +726,6 @@ function MoaiPlayer(element) {
 		el.find('.moai-canvas-wrapper').first().toggleClass("portrait", (height > width));
 	}
 
-
-
 	this.onError = function(err) {
 		console.log("ERROR: ",err);
 	};
@@ -732,20 +741,35 @@ function MoaiPlayer(element) {
     function onError(x) {
         this.onError(x);
     }
-	onTitleChange(title);
-	this.moai = new MoaiJS(canvasEl[0],ram*1024*1024,onTitleChange,onStatusChange,onError.bind(this),onPrint.bind(this), onResolutionChange);
+    onTitleChange(title);
+
+    this.hideInfo = function() {
+        infoEl[0].style.display = "none";
+        canvasWrapperEl[0].style.display="table-row";
+    }
+
+    this.initMoai = function() {
+        this.moai = new MoaiJS(canvasEl[0], ram * 1024 * 1024, onTitleChange, onStatusChange, onError.bind(this), onPrint.bind(this), onResolutionChange);
+    }
 }
 
+
 MoaiPlayer.prototype.run = function() {
+    //init moai when they go to run to avoid chewing up ram on pages where the user isn't interested in playing our embedded game
+    this.hideInfo();
+    if (!this.moai) { this.initMoai(); }
     this.moai.loadFileSystem(this.url);
     this.moai.run(this.script);
 }
 
 MoaiPlayer.prototype.loadRom = function(rom) {
+    if (!this.moai) { this.initMoai(); }
     this.moai.loadFileSystem(rom);
 }
 
 MoaiPlayer.prototype.runString = function(str) {
+    this.hideInfo();
+    if (!this.moai) { this.initMoai(); }
     this.moai.runString(str);
 }
 
@@ -755,10 +779,12 @@ MoaiPlayer.prototype.stop = function() {
 }
 
 MoaiPlayer.prototype.pause = function() {
-	this.moai.pause();
+	if (!this.moai) return;
+    this.moai.pause();
 }
 
 MoaiPlayer.prototype.unpause = function() {
+    if (!this.moai) return;
     this.moai.unpause();
 }
 

@@ -42,6 +42,7 @@ app.use(app.router);
 
 app.post('/run', runner.index);
 app.get('/run', runner.index);
+app.get('/:slug/:revision/embed', runner.embed);
 app.get('/:slug/:revision', editor.show);
 app.get('/:slug', editor.show);
 app.get('/', editor.show);

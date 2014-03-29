@@ -15,8 +15,9 @@
 }
 
 
-.moai-info,
-.moai-canvas-wrapper {
+.moai-canvas-wrapper,
+.moai-info
+{
     background-color: #202025;
     width: 100%;
     height: 100%;
