@@ -775,6 +775,7 @@ MoaiPlayer.prototype.runString = function(str) {
 
 MoaiPlayer.prototype.stop = function() {
 	//TODO unhook events and free up moai host ram
+    this.moai.pause();
 	this.moai = null;
 }
 

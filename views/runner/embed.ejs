@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' href="/vendor/font-awesome-4.0.3/css/font-awesome.min.css" />
     <link href="/stylesheets/player-embedded.css" rel="stylesheet">
+    <link rel="stylesheet" href="/vendor/highlightjs/styles/monokai.css">
+    <script src="/vendor/highlightjs/highlight.pack.js"></script>
+
 </head>
 <body>
 <style>
@@ -93,23 +96,28 @@
 </style>
 
 <div id="moaiplayer" class="moai-player"  data-title="MOAI Player" data-ram="64">
-    <div class="moai-window">
+    <div class="moai-window code">
         <div class="moai-header">
             <span class="moai-title">MOAI</span><span class="moai-status">Loading..</span>
             <div style="clear:both"></div>
         </div>
         <div class="moai-info">
-            <div class="fiddle-brand">MoaiFiddle</div>
-            <div id="runMe"><i class="fa fa-play"></i></div>
-            <div class="moai-cpal">
-                    <img src="/images/moailogo-white.svg">
-                    <a href="http://www.getmoai.com">www.getmoai.com</a>
-            </div>
-
+            <% if (fiddle.hidecode) { %>
+                <div class="fiddle-brand">MoaiFiddle</div>
+                <div id="runMe"><i class="fa fa-play"></i></div>
+                <div class="moai-cpal">
+                        <img src="/images/moailogo-white.svg">
+                        <a href="http://www.getmoai.com">www.getmoai.com</a>
+                </div>
+            <% } else { %>
+                <pre><code><%= fiddle.fiddle %></code></pre>
+            <% } %>
 
         </div>
-        <div class="moai-canvas-wrapper" style="display:none"><canvas class="moai-canvas"  tabindex="1"></canvas></div>
+        <div class="moai-canvas-wrapper"><canvas class="moai-canvas"  tabindex="1"></canvas></div>
         <div class="moai-footer">
+            <i id="moai-play" class="fa fa-play">&nbsp;</i>
+            <i id="moai-code" class="fa fa-code">&nbsp;</i>
             <i id="moai-pause" class="fa fa-pause">&nbsp;</i>
 
             <div class="fiddle-link"><a href="/<%= fiddle.slug %>/<%= fiddle.revision %>"><i class="fa fa-pencil"></i> Edit in MoaiFiddle</a></div>
@@ -134,13 +142,34 @@
 <script src="/javascripts/b64.js"></script>
 
 <script>
+    hljs.initHighlightingOnLoad();
     var player = new MoaiPlayer($("#moaiplayer"),true);
     var script =b64.base64ToStr(decodeURIComponent("<%- fiddle.encfiddle %>"));
-    $("#runMe").on("click",function() {
-        console.log(script);
-        player.loadRom('/moaijs/moaiapp.rom');
-        player.runString(script);
-    });
+    var firstrun = true;
+    function doRun () {
+        $(".moai-window").removeClass("code");
+        $(".moai-canvas-wrapper")[0].style.display = "table-row";
+        $(".moai-info")[0].style.display = "none";
+        if (firstrun) {
+            firstrun = false;
+            player.loadRom('/moaijs/moaiapp.rom');
+            player.runString(script);
+        } else {
+            player.unpause();
+        }
+    }
+
+
+    $("#runMe").on("click",doRun);
+    $("#moai-play").on("click",doRun);
+    $("#moai-code").on("click", function() {
+        player.stop();
+        firstrun = true;
+        $(".moai-window").addClass("code");
+        $(".moai-canvas-wrapper")[0].style.display = "none";
+        $(".moai-info")[0].style.display = "table-row";
+    })
+
 </script>
 
 </body>
