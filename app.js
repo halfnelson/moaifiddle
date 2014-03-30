@@ -29,6 +29,7 @@ app.use(cookieParser());
 app.use(function(req, res, next) {
     if (req.url == '/moaijs/moaijs.js') {
         req.url = '/moaijs/moaijs.js.noide';
+        res.setHeader('Content-Type','application/javascript'); //to get zip support
     }
     next();
  });
