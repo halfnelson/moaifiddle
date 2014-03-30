@@ -98,6 +98,7 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
+    margin-left: 205px;
 }
 
 #editorNav .buttons li {
@@ -127,6 +128,7 @@ body {
 #editorNav .buttons li a:hover {
 
     background-color: #222;
+    color: #EEE;
 
 }
 
@@ -279,4 +281,21 @@ img.pulse:hover {
     -webkit-animation-name: pulse;
     -webkit-animation-duration: 0.5s;
     -webkit-animation-iteration-count: 10;
+}
+
+#editorNav .home-logo {
+    float: left;
+    line-height: 50px;
+    text-decoration: none;
+    color: #EEE;
+    font-size: 22px;
+    margin-left: 10px;
+
+}
+
+#fileBrowser .window-title {
+    font-family: sans-serif;
+    padding: 5px;
+    background-color: #111;
+    font-size: 14px;
 }

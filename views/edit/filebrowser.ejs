@@ -1,5 +1,6 @@
 <script id="fileBrowserTemplate" type="text/ractive">
     <div id="fileBrowser">
+    <div class="window-title">Filesystem /</div>
         <ul>
          {{# fileList( files ) }}
              <li style="padding-left: {{depth * 5}}px; display:{{ visible(parent) ? "list-item":"none" }}; "
