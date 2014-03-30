@@ -27,12 +27,10 @@ app.use(cookieParser());
 
 //shim for our moaijs.js file
 app.use(function(req, res, next) {
-    if (req.path == '/moaijs/moaijs.js') {
-        res.type('application/javascript');
-        fs.createReadStream("./public/moaijs/moaijs.js.noide").pipe(res);
-    } else {
-        next();
+    if (req.url == '/moaijs/moaijs.js') {
+        req.url = '/moaijs/moaijs.js.noide';
     }
+    next();
  });
 
 app.use(express.static(path.join(__dirname, 'public')));
