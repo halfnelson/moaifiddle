@@ -220,3 +220,63 @@ body {
 #fileBrowser .dir.closed i.fa:before {
     content: "\f0da";
 }
+
+#editorContainer .loading {
+    height: 50px;
+    position:absolute;
+    top:50%;
+    left:0;
+    right:0;
+    text-align:center;
+    font-size: 40px;
+    font-weight: bold;
+    font-family: 'Monaco', monospace;
+    color: #CCC;
+    -webkit-animation-name: pulse;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    animation-name: pulse;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+
+@-webkit-keyframes pulse {
+    from {
+        opacity: 0.25;
+    }
+    50% {
+        opacity: 1.0;
+    }
+    to {
+        opacity: 0.25;
+    }
+}
+@-moz-keyframes pulse {
+    from {
+        opacity: 0.25;
+    }
+    50% {
+        opacity: 1.0;
+    }
+    to {
+        opacity: 0.25;
+    }
+}
+@keyframes pulse {
+    from {
+        opacity: 0.25;
+    }
+    50% {
+        opacity: 1.0;
+    }
+    to {
+        opacity: 0.25;
+    }
+}
+
+img.pulse:hover {
+    -webkit-animation-name: pulse;
+    -webkit-animation-duration: 0.5s;
+    -webkit-animation-iteration-count: 10;
+}
