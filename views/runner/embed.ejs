@@ -61,11 +61,26 @@
 <script type="text/javascript" src="/moaijs/howler.js"></script>
 <script src="/vendor/jquery-ui/js/jquery-1.10.2.js"></script>
 <!-- the app -->
-<script type="text/javascript" src="/moaijs/moaijs.js"></script>
 <script type="text/javascript" src="/moaijs/moaihost.js"></script>
 <script src="/javascripts/b64.js"></script>
 
 <script>
+
+    $.cachedScript = function( url, options ) {
+
+        // Allow user to set any option except for dataType, cache, and url
+        options = $.extend( options || {}, {
+            dataType: "script",
+            cache: true,
+            url: url
+        });
+
+        // Use $.ajax() since it is more flexible than $.getScript
+        // Return the jqXHR object so we can chain callbacks
+        return $.ajax( options );
+    };
+
+
     hljs.initHighlightingOnLoad();
     var player = new MoaiPlayer($("#moaiplayer"),true);
     var script =b64.base64ToStr(decodeURIComponent("<%- fiddle.encfiddle %>"));
@@ -75,6 +90,10 @@
         $("#moai-play")[0].style.color = 'darkred';
         $("#moai-play")[0].style.opacity = 0.2;
     }
+    function firstLaunch() {
+        player.loadRom('/moaijs/moaiapp.rom');
+        player.runString(script);
+    }
     function doRun () {
         if (player.isSupported()) {
             $(".moai-window").removeClass("code");
@@ -82,8 +101,19 @@
             $(".moai-info")[0].style.display = "none";
             if (firstrun) {
                firstrun = false;
-               player.loadRom('/moaijs/moaiapp.rom');
-               player.runString(script);
+                //load moaijs now
+                if (window.CreateMoaiRuntime) {
+                    //we already have it
+                    console.log("using existing moaijs.js");
+                    firstLaunch();
+
+                } else {
+                    $.cachedScript('/moaijs/moaijs.js').done(function() {
+                        //grabbed it
+                        console.log("loaded moaijs.js");
+                        firstLaunch();
+                    });
+                }
              } else {
                 player.unpause();
             }
