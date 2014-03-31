@@ -26,6 +26,7 @@ var embed = function(req, res) {
             return;
         }
         fiddle.encfiddle = encodeURIComponent(b64.strToBase64(fiddle.fiddle));
+        fiddle.light = !!req.query.light;
         res.render('runner/embed.ejs',{fiddle: fiddle, layout: false});
     }).error(function(e){ console.log("Error:",e) });
 };
