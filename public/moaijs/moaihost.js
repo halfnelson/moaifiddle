@@ -664,7 +664,7 @@ function MoaiPlayer(element, skipTemplate) {
                              <div style="clear:both"></div> \
                          </div> \
                             <div class="moai-info"></div>    \
-                            <div class="moai-canvas-wrapper" style="display:none"><canvas class="moai-canvas"  tabindex="1"></canvas></div> \
+                            <div class="moai-canvas-wrapper" style="display: none;"><canvas class="moai-canvas"  tabindex="1"></canvas></div> \
                         <div class="moai-footer"> \
                           <i id="moai-pause" class="fa fa-pause">&nbsp;</i>    \
                             <div class="moai-attrib"> \
@@ -748,10 +748,59 @@ function MoaiPlayer(element, skipTemplate) {
         canvasWrapperEl[0].style.display="table-row";
     }
 
+
+
+
+
     this.initMoai = function() {
         this.moai = new MoaiJS(canvasEl[0], ram * 1024 * 1024, onTitleChange, onStatusChange, onError.bind(this), onPrint.bind(this), onResolutionChange);
     }
 }
+
+MoaiPlayer.prototype.isSupported = function() {
+    var gl = false;
+    var testCanvas = document.createElement("canvas");
+    try { gl = testCanvas.getContext("webgl"); }
+    catch (x) { gl = null; }
+
+    if (gl === null) {
+        try { gl = canvas.getContext("experimental-webgl");}
+        catch (x) { gl = null; }
+    }
+
+    if (!gl) {
+        console.log("GLERROR: No gl context");
+        return false;
+    }
+
+
+    if ("function" !== typeof gl.getParameter && "object" !== typeof gl.getParameter) {
+        console.log("GLERROR: no getParameter function");
+        return false;
+    }
+
+    var version = gl.getParameter(gl["VERSION"]);
+    if (!version) {
+        console.log("GLERROR: could not determine webgl version");
+        return false;
+    }
+
+    var majorVerMatch = (version + "").match(/WebGL (\d*)\.\d*/);
+    if (majorVerMatch.length < 2) {
+        console.log("GLERROR: couldnt parse gl version: ",version);
+        return false;
+    }
+    var majorVer = majorVerMatch[1] << 0;
+    if (majorVer < 1) {
+        console.log("GLERROR: major version must be above 1 got :",majorVer,"from:",version);
+        return false;
+    }
+
+    gl = null;
+    testCanvas = null;
+    //all good here
+    return true;
+};
 
 
 MoaiPlayer.prototype.run = function() {

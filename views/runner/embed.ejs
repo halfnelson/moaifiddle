@@ -114,7 +114,7 @@
             <% } %>
 
         </div>
-        <div class="moai-canvas-wrapper"><canvas class="moai-canvas"  tabindex="1"></canvas></div>
+        <div class="moai-canvas-wrapper" style="display: none;"><canvas class="moai-canvas"  tabindex="1"></canvas></div>
         <div class="moai-footer">
             <i id="moai-play" class="fa fa-play">&nbsp;</i>
             <i id="moai-code" class="fa fa-code">&nbsp;</i>
@@ -146,16 +146,25 @@
     var player = new MoaiPlayer($("#moaiplayer"),true);
     var script =b64.base64ToStr(decodeURIComponent("<%- fiddle.encfiddle %>"));
     var firstrun = true;
+
+    if (! player.isSupported()) {
+        $("#moai-play")[0].style.color = 'darkred';
+        $("#moai-play")[0].style.opacity = 0.2;
+    }
     function doRun () {
-        $(".moai-window").removeClass("code");
-        $(".moai-canvas-wrapper")[0].style.display = "table-row";
-        $(".moai-info")[0].style.display = "none";
-        if (firstrun) {
-            firstrun = false;
-            player.loadRom('/moaijs/moaiapp.rom');
-            player.runString(script);
+        if (player.isSupported()) {
+            $(".moai-window").removeClass("code");
+            $(".moai-canvas-wrapper")[0].style.display = "table-row";
+            $(".moai-info")[0].style.display = "none";
+            if (firstrun) {
+               firstrun = false;
+               player.loadRom('/moaijs/moaiapp.rom');
+               player.runString(script);
+             } else {
+                player.unpause();
+            }
         } else {
-            player.unpause();
+           alert("WebGL 1.0 is required but isn't supported by your current browser.\n Try the latest firefox or chrome");
         }
     }
 
