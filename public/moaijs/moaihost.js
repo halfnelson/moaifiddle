@@ -6,6 +6,7 @@ var LoadRom = (function() {
 /* rom cache */
 function RomCache() {
       this.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+
       this.IDB_RO = "readonly";
       this.IDB_RW = "readwrite";
       this.DB_NAME = 'EM_PRELOAD_CACHE';
@@ -17,10 +18,14 @@ function RomCache() {
 RomCache.prototype.openDatabase = function() {
         var that = this;
         var d = D.defer();
+        if (!this.indexedDB) {
+            return D.rejected("no Indexed DB")
+        }
+
         try {
           var openRequest = this.indexedDB.open(this.DB_NAME, this.DB_VERSION);
         } catch (e) {
-          d.reject(e);
+            return D.rejected(e);
         }
         openRequest.onupgradeneeded = function(event) {
           var db = event.target.result;
@@ -57,6 +62,9 @@ RomCache.prototype.checkCachedPackage = function( packageName, uuid) {
    var that = this;
    return this.getDb().then(function(db) {
       return that.dbCheckCachedPackage(db, packageName, uuid)
+   }).otherwise(function(e) {
+        console.log("Can't check package cache :",e);
+        return false;
    });
 }
 
@@ -108,7 +116,10 @@ RomCache.prototype.cacheRemotePackage = function(packageName, packageData, packa
    var that = this;
    return this.getDb().then(function(db) {
       return that.dbCacheRemotePackage(db, packageName, packageData, packageMeta);
-   });
+   }).otherwise(function(e) {
+           console.log("Can't cache package:",e);
+           return false;
+       });
 };
 
 RomCache.prototype.dbCacheRemotePackage = function(db, packageName, packageData, packageMeta) {
@@ -195,7 +206,8 @@ function LoadFileSystemData(packageName, uuid, romUrl, progress) {
           return LoadRemoteFileSystemData(romUrl, progress)
                   .then(function(packageRaw) {
                       //add it to the cache for next time
-                      return romCache.cacheRemotePackage(packageName, packageRaw, { uuid: uuid })
+                      romCache.cacheRemotePackage(packageName, packageRaw, { uuid: uuid });
+                      return packageRaw; //just return it, who cares if cache fails.
                   })
         }
     });
