@@ -215,6 +215,9 @@ body {
     opacity: 1;
 }
 
+.moai-info code {
+    font-size: 12px;
+}
 
 
 

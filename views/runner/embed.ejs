@@ -79,7 +79,7 @@
         // Return the jqXHR object so we can chain callbacks
         return $.ajax( options );
     };
-
+    hljs.configure({tabReplace: '  '})
 
     hljs.initHighlightingOnLoad();
     var player = new MoaiPlayer($("#moaiplayer"),true);
