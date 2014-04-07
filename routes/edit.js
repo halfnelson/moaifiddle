@@ -9,7 +9,16 @@ var show = function(req, res, next) {
     var slug = req.params.slug;
     var revision = req.params.revision || 1;
 
-    var fiddlePromise = slug ?  fiddleRepo.find(slug,revision) : D.resolved(new Fiddle());
+    var fiddlePromise = null;
+    if (slug) {
+        fiddlePromise = fiddleRepo.find(slug,revision)
+    } else {
+        var f = new Fiddle();
+        if (req.body.fiddle) {
+            f.fiddle = req.body.fiddle;
+        }
+        fiddlePromise = D.resolved(f);
+    }
 
     console.log('in show');
     fiddlePromise.then(function(fiddle) {
