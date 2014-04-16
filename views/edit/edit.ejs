@@ -25,7 +25,9 @@
             <li><a on-click="play"><i class="fa fa-play">&nbsp;</i>Play</a></li>
             <li><a on-click="save"><i class="fa fa-pencil">&nbsp;</i>{{ slug  ? "Update" : "Save"}}</a></li>
         </ul>
+
     </div>
+    <sharedialog></sharedialog>
     <div id="fileBrowserContainer"></div>
     <div class="cols" on-mousemove="splitter-move" on-mouseup="splitter-end-move" style="left: {{ filelist.visible ? 209 : 9}}px">
        <div class="resizable code-wrapper" style='width: {{ splitter.location }}%'>
@@ -59,16 +61,20 @@
 <script src="/javascripts/b64.js"></script>
 
 <% include filebrowser.ejs %>
+<% include share.ejs %>
 
 <script>
     //global fiddle !!!
     var fiddle = b64.base64ToStr(decodeURIComponent("<%- fiddle.encfiddle %>"));
 
 </script>
+
 <script >
+
     var ractive = new Ractive({
         el: 'editorContainer',
         template: '#editorTemplate',
+        twoway:false,
         data: {
             filelist: {
                 visible: true,
@@ -84,10 +90,15 @@
             },
             currentSplitter: {}
         },
+        components: {
+            sharedialog: ShareDialog
+        },
         complete: function() {
             //bind some vars
             this.slug = $('#runForm').find('input[name="slug"]').val();
             this.set("slug",this.slug);
+
+
             $('#editor').text(fiddle);
 
             var editor = ace.edit("editor");
