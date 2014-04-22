@@ -38,7 +38,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use(app.router);
-
+app.post('/snippet/edit', editor.show);
+app.post('/snippet', runner.snippet);
 app.post('/run', runner.index);
 app.get('/run', runner.index);
 app.get('/:slug/:revision/embed', runner.embed);

@@ -31,6 +31,15 @@ var embed = function(req, res) {
     }).error(function(e){ console.log("Error:",e) });
 };
 
+var snippet = function(req, res) {
+    if (req.body.fiddle) {
+        var fiddle=  { encfiddle: encodeURIComponent(b64.strToBase64(req.body.fiddle)) };
+    } else {
+        fiddle = { encfiddle: ""};
+    }
+    res.render('runner/snippet.ejs',{ fiddle: fiddle, layout: false});
+};
 
-module.exports = { index: run, embed: embed };
+
+module.exports = { index: run, embed: embed, snippet: snippet };
 

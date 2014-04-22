@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Moai Fiddle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href="/vendor/font-awesome-4.0.3/css/font-awesome.min.css" />
+    <link href="/stylesheets/player-embedded.css" rel="stylesheet">
+</head>
+<body>
+
+
+<div id="moaiplayer" class="moai-player" data-title="MOAI Player" data-ram="64">
+    <div class="moai-window code">
+        <div class="moai-header">
+            <span class="moai-title">MOAI</span><span class="moai-status">Loading..</span>
+            <div style="clear:both"></div>
+        </div>
+        <div class="moai-info">
+            <div class="fiddle-brand">MoaiFiddle</div>
+            <div id="runMe"><i class="fa fa-play"></i></div>
+            <div class="moai-cpal">
+                <img src="/images/moailogo-white.svg">
+                <a href="http://www.getmoai.com">www.getmoai.com</a>
+            </div>
+        </div>
+
+
+        <div class="moai-canvas-wrapper" style="display: none;"><canvas class="moai-canvas"  tabindex="1"></canvas></div>
+
+        <div class="moai-footer">
+            <i id="moai-play" class="fa fa-play">&nbsp;</i>
+           <!-- <i id="moai-console" class="fa fa-terminal">&nbsp;</i>-->
+            <i id="moai-pause" class="fa fa-pause">&nbsp;</i>
+
+            <div class="fiddle-link">
+                <form method="post" id="editform" action="/snippet/edit" target="new">
+                    <input type="hidden" name="fiddle" id="fiddletext" value="">
+                    <a href="#" id="editformbutton"><i class="fa fa-pencil"></i> Edit in MoaiFiddle</a>
+                </form>
+            </div>
+            <div class="moai-attrib">
+                Made with Moai
+                www.getmoai.com
+                Copyright (c) 2010-2012 Zipline Games, Inc. All Rights Reserved.
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<!-- we need these -->
+<script type="text/javascript" src="/moaijs/howler.js"></script>
+<script src="/vendor/jquery-ui/js/jquery-1.10.2.js"></script>
+<!-- the app -->
+<script type="text/javascript" src="/moaijs/moaihost.js"></script>
+<script src="/javascripts/b64.js"></script>
+
+<script>
+
+    $.cachedScript = function( url, options ) {
+
+        // Allow user to set any option except for dataType, cache, and url
+        options = $.extend( options || {}, {
+            dataType: "script",
+            cache: true,
+            url: url
+        });
+
+        // Use $.ajax() since it is more flexible than $.getScript
+        // Return the jqXHR object so we can chain callbacks
+        return $.ajax( options );
+    };
+
+    var player = new MoaiPlayer($("#moaiplayer"),true);
+    var script =b64.base64ToStr(decodeURIComponent("<%- fiddle.encfiddle %>"));
+    var firstrun = true;
+
+    if (! player.isSupported()) {
+        $("#moai-play")[0].style.color = 'darkred';
+        $("#moai-play")[0].style.opacity = 0.2;
+    }
+    function firstLaunch() {
+        player.loadRom('/moaijs/moaiapp.rom');
+        player.runString(script);
+    }
+    function doRun () {
+        if (player.isSupported()) {
+            $(".moai-canvas-wrapper")[0].style.display = "table-row";
+            $(".moai-info")[0].style.display = "none";
+            if (firstrun) {
+                firstrun = false;
+                //load moaijs now
+                if (window.CreateMoaiRuntime) {
+                    //we already have it
+                    console.log("using existing moaijs.js");
+                    firstLaunch();
+
+                } else {
+                    $.cachedScript('/moaijs/moaijs.js').done(function() {
+                        //grabbed it
+                        console.log("loaded moaijs.js");
+                        firstLaunch();
+                    });
+                }
+            } else {
+                player.unpause();
+            }
+        } else {
+            alert("WebGL 1.0 is required but isn't supported by your current browser.\n Try the latest firefox or chrome");
+        }
+    }
+
+
+    $("#runMe").on("click",doRun);
+    $("#moai-play").on("click",doRun);
+
+
+    $("#editformbutton").on("click", function() {
+        $("#fiddletext").val(script);
+        $("#editform").submit();
+    });
+
+</script>
+
+</body>
+</html>
