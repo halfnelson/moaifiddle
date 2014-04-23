@@ -24,10 +24,13 @@
         <ul class="buttons">
             <li><a on-click="play"><i class="fa fa-play">&nbsp;</i>Play</a></li>
             <li><a on-click="save"><i class="fa fa-pencil">&nbsp;</i>{{ slug  ? "Update" : "Save"}}</a></li>
+            {{ #slug}}
+            <li ><a on-click="toggleShare"><i class="fa fa-share-square-o">&nbsp;</i>Share</a><sharedialog slug="{{ slug }}"></sharedialog></li>
+            {{/slug}}
         </ul>
 
     </div>
-    <sharedialog></sharedialog>
+
     <div id="fileBrowserContainer"></div>
     <div class="cols" on-mousemove="splitter-move" on-mouseup="splitter-end-move" style="left: {{ filelist.visible ? 209 : 9}}px">
        <div class="resizable code-wrapper" style='width: {{ splitter.location }}%'>
@@ -171,6 +174,16 @@
         } else {
             this.set(splitter+'.location',((event.original.pageY - offsetTop ) /container.outerHeight()) *100);
         }
+    });
+
+    ractive.on("toggleShare", function(event) {
+        var $node = $(event.node);
+        var off= $node.offset();
+
+        var dialog = $("#shareDialog");
+        dialog.css("left", off.left);
+        dialog.css("top", off.top+$node.height());
+        dialog.toggle();
     });
 
     ractive.on("save", function() {

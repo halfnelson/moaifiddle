@@ -1,9 +1,9 @@
 <script id="shareTemplate" type="text/ractive">
-    <div id="shareDialog">
-        <label for="sharelink">Share Link</label>
-        <input type="text" readonly name="sharelink" value="{{ link() }}" />
-        <label for="embedinpage">Embed in page</label>
-        <input type="text" readonly name="embedinpage" value="{{ iframe() }}" />
+    <div id="shareDialog" style="display: none">
+        <label for="sharelink">Share Link</label><br>
+        <input type="text" readonly name="sharelink" value="{{ link }}" on-focus="focus" /><br>
+        <label for="embedinpage">Embed in page</label><br>
+        <input type="text" readonly name="embedinpage" value="{{ iframe }}" on-focus="focus"/><br>
         <h4>Theme</h4>
         <label><input type="radio" name="{{theme}}" value="dark">dark</label>
         <label><input type="radio" name="{{theme}}" value="light">light</label>
@@ -13,19 +13,20 @@
 
 <script language="javascript">
         var ShareDialog = Ractive.extend({
-            template: 'shareTemplate',
+            template: '#shareTemplate',
             data: {
 
                 slug: "",
                 revision: 1,
-                theme: "light",
+                theme: "light"
 
-
+            },
+            computed: {
                 link: function() {
-                    return location.protcol + '//'+ location.host + "/" + this.get('slug') +'/'+this.get('revision');
+                    return location.protocol + '//'+ location.host + "/" + this.get('slug') +'/'+this.get('revision');
                 },
                 iframe: function() {
-                    var link = this.get('link').bind(this)();
+                    var link = this.get('link');
                     link = link + '/embed';
                     if (this.get("theme") == "light") {
                         link = link+'?light=true';
@@ -35,8 +36,15 @@
             },
 
             init:function() {
-               alert('hello?');
+                console.log("init share");
+                this.on("focus",function(event) {
+                    window.setTimeout(function(){                    event.node.select();},1);
+                    event.original.preventDefault();
+                    event.original.stopPropagation();
+
+                });
             }
+
         });
 
        // Ractive.components.sharedialog = ShareDialog;
