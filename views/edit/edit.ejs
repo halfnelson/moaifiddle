@@ -25,7 +25,7 @@
             <li><a on-click="play"><i class="fa fa-play">&nbsp;</i>Play</a></li>
             <li><a on-click="save"><i class="fa fa-pencil">&nbsp;</i>{{ slug  ? "Update" : "Save"}}</a></li>
             {{ #slug}}
-            <li ><a on-click="toggleShare"><i class="fa fa-share-square-o">&nbsp;</i>Share</a><sharedialog slug="{{ slug }}"></sharedialog></li>
+            <li ><a on-click="toggleShare"><i class="fa fa-share-square-o">&nbsp;</i>Share</a><modal><sharedialog slug="{{ slug }}"></sharedialog></modal></li>
             {{/slug}}
         </ul>
 
@@ -59,6 +59,8 @@
 </script>
 
 
+
+
 <script type="text/javascript" src="/moaijs/moaijs.js"></script>
 <script src="/vendor/ractive.js"></script>
 <script src="/javascripts/b64.js"></script>
@@ -66,6 +68,31 @@
 <% include filebrowser.ejs %>
 <% include share.ejs %>
 
+<script>
+    var Modal = Ractive.extend({
+        template: '<div class="modal"  style="display: {{ display }}">' +
+                '<div class="modalBackground" style="position: absolute; z-index:100; background-color:#ff0000"></div>' +
+                '<div class="modalcontent">{{>content}}</div>' +
+                '</div>',
+        data: {
+            visible: true
+        },
+        computed: {
+            display: function() {
+                return  (this.get('visible')) ? "block" : "none";
+            }
+        },
+
+        init:function() {
+            console.log("hello?");
+
+            $(this.find(".modalBackground")).css("width",$('document').width()+"px");
+            $(this.find(".modalBackground")).css("height",$('document').height()+"px");
+
+        }
+
+    });
+</script>
 <script>
     //global fiddle !!!
     var fiddle = b64.base64ToStr(decodeURIComponent("<%- fiddle.encfiddle %>"));
@@ -94,7 +121,8 @@
             currentSplitter: {}
         },
         components: {
-            sharedialog: ShareDialog
+            sharedialog: ShareDialog,
+            modal: Modal
         },
         complete: function() {
             //bind some vars
