@@ -25,7 +25,9 @@
             <li><a on-click="play"><i class="fa fa-play">&nbsp;</i>Play</a></li>
             <li><a on-click="save"><i class="fa fa-pencil">&nbsp;</i>{{ slug  ? "Update" : "Save"}}</a></li>
             {{ #slug}}
-            <li ><a on-click="toggleShare"><i class="fa fa-share-square-o">&nbsp;</i>Share</a><modal><sharedialog slug="{{ slug }}"></sharedialog></modal></li>
+            <li ><a on-click="toggleShare"><i class="fa fa-share-square-o">&nbsp;</i>Share</a>
+            <modal><sharedialog slug="{{ slug }}"></sharedialog></modal>
+            </li>
             {{/slug}}
         </ul>
 
@@ -69,10 +71,12 @@
 <% include share.ejs %>
 
 <script>
+
+    Ractive.components.sharedialog = ShareDialog;
     var Modal = Ractive.extend({
-        template: '<div class="modal"  style="display: {{ display }}">' +
-                '<div class="modalBackground" style="position: absolute; z-index:100; background-color:#ff0000"></div>' +
-                '<div class="modalcontent">{{>content}}</div>' +
+        template: '<div class="modal"   style="display: {{ display }}">' +
+                '<div class="modalBackground" proxy-click="backgroundClick" style="position: absolute; top:0; left:0; bottom:0; right:0; z-index:100;"></div>' +
+                '<div class="modalcontent" proxy-click="contentClick" >{{>content}}</div>' +
                 '</div>',
         data: {
             visible: true
@@ -84,11 +88,13 @@
         },
 
         init:function() {
-            console.log("hello?");
+            this.on("backgroundClick", function(e) {
+                this.set('visible',false);
+            });
+        },
 
-            $(this.find(".modalBackground")).css("width",$('document').width()+"px");
-            $(this.find(".modalBackground")).css("height",$('document').height()+"px");
-
+        show: function() {
+            this.set('visible',true);
         }
 
     });
@@ -118,10 +124,10 @@
                 location: 50,
                 direction: "v"
             },
-            currentSplitter: {}
+            currentSplitter: {},
+            currentDropdown: "None"
         },
         components: {
-            sharedialog: ShareDialog,
             modal: Modal
         },
         complete: function() {
@@ -205,13 +211,7 @@
     });
 
     ractive.on("toggleShare", function(event) {
-        var $node = $(event.node);
-        var off= $node.offset();
-
-        var dialog = $("#shareDialog");
-        dialog.css("left", off.left);
-        dialog.css("top", off.top+$node.height());
-        dialog.toggle();
+        this.set('currentDropdown','share');
     });
 
     ractive.on("save", function() {
