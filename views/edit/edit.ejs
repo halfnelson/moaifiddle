@@ -25,7 +25,7 @@
             <navbutton caption="Play" icon="play" />
             <navbutton caption="{{ slug  ? "Update" : "Save"}}" icon="pencil" />
             {{ #slug}}
-            <navdropdown caption="Share" icon="share-square-o"><h1>hi</h1></navdropdown>
+            <navdropdown caption="Share" icon="share-square-o"><modal><sharedialog slug={{slug}}></sharedialog></modal></navdropdown>
             {{/slug}}
         </ul>
 

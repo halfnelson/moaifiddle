@@ -15,10 +15,9 @@
             icon: false
         },
         init: function() {
-            var popup = this.findComponent("modal");
             this.on("showPopup",function() {
                 var popup = this.findComponent("modal");
-                popup.set("visible",true);
+                popup.show();
             })
         }
     });
