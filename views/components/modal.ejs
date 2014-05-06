@@ -1,0 +1,30 @@
+<script>
+    var Modal = Ractive.extend({
+        template: '<div class="modal"   style="display: {{ display }}">' +
+                '<div class="modalBackground" proxy-click="backgroundClick" style="position: absolute; top:0; left:0; bottom:0; right:0; z-index:100;"></div>' +
+                '<div class="modalcontent" proxy-click="contentClick" style="position: relative; z-index:101;">{{>content}} {{#visible}}visible{{/visible}} </div>' +
+                '</div>',
+        data: {
+            visible: false
+        },
+        computed: {
+            display: function() {
+                return  (this.get('visible')) ? "block" : "none";
+            }
+        },
+
+        init:function() {
+            this.on("backgroundClick", function(e) {
+                this.set('visible',false)
+            });
+        },
+
+        show: function() {
+            this.set('visible',true);
+            console.log("setting visible");
+        }
+
+    });
+
+    Ractive.components.modal = Modal;
+</script>

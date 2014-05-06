@@ -22,12 +22,10 @@
     <div id="editorNav">
         <a class="home-logo" href="/" title="Create a new fiddle"><i class="fa fa-pencil-square-o"></i> MoaiFiddle</a>
         <ul class="buttons">
-            <li><a on-click="play"><i class="fa fa-play">&nbsp;</i>Play</a></li>
-            <li><a on-click="save"><i class="fa fa-pencil">&nbsp;</i>{{ slug  ? "Update" : "Save"}}</a></li>
+            <navbutton caption="Play" icon="play" />
+            <navbutton caption="{{ slug  ? "Update" : "Save"}}" icon="pencil" />
             {{ #slug}}
-            <li ><a on-click="toggleShare"><i class="fa fa-share-square-o">&nbsp;</i>Share</a>
-            <modal><sharedialog slug="{{ slug }}"></sharedialog></modal>
-            </li>
+            <navdropdown caption="Share" icon="share-square-o"><h1>hi</h1></navdropdown>
             {{/slug}}
         </ul>
 
@@ -67,41 +65,19 @@
 <script src="/vendor/ractive.js"></script>
 <script src="/javascripts/b64.js"></script>
 
-<% include filebrowser.ejs %>
+<% include ../components/modal.ejs %>
+<% include ../components/filebrowser.ejs %>
+<% include ../components/navbar.ejs %>
 <% include share.ejs %>
 
 <script>
-
-    Ractive.components.sharedialog = ShareDialog;
-    var Modal = Ractive.extend({
-        template: '<div class="modal"   style="display: {{ display }}">' +
-                '<div class="modalBackground" proxy-click="backgroundClick" style="position: absolute; top:0; left:0; bottom:0; right:0; z-index:100;"></div>' +
-                '<div class="modalcontent" proxy-click="contentClick" >{{>content}}</div>' +
-                '</div>',
-        data: {
-            visible: true
-        },
-        computed: {
-            display: function() {
-                return  (this.get('visible')) ? "block" : "none";
-            }
-        },
-
-        init:function() {
-            this.on("backgroundClick", function(e) {
-                this.set('visible',false);
-            });
-        },
-
-        show: function() {
-            this.set('visible',true);
-        }
-
-    });
-</script>
-<script>
     //global fiddle !!!
     var fiddle = b64.base64ToStr(decodeURIComponent("<%- fiddle.encfiddle %>"));
+
+
+
+
+
 
 </script>
 

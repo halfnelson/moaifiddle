@@ -1,0 +1,28 @@
+
+<script>
+    var NavButton = Ractive.extend({
+       template: '<li><a>{{#icon}}<i class="fa fa-{{icon}}">&nbsp;</i>{{/icon}}{{caption}}</a></li>',
+       data: {
+           caption: 'Caption',
+           icon: false
+       }
+    });
+
+    var NavDropDown = Ractive.extend({
+        template: '<li ><a on-click="showPopup">{{#icon}}<i class="fa fa-{{icon}}">&nbsp;</i>{{/icon}}{{caption}}</a>{{>content}}</li>',
+        data: {
+            caption: 'Caption',
+            icon: false
+        },
+        init: function() {
+            var popup = this.findComponent("modal");
+            this.on("showPopup",function() {
+                var popup = this.findComponent("modal");
+                popup.set("visible",true);
+            })
+        }
+    });
+
+    Ractive.components.navbutton = NavButton;
+    Ractive.components.navdropdown = NavDropDown;
+</script>
