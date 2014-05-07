@@ -1,6 +1,6 @@
 /*
 	ractive.js v0.4.0
-	2014-05-06 - commit doesntwo 
+	2014-05-07 - commit doesntwo 
 
 	http://ractivejs.org
 	http://twitter.com/RactiveJS
@@ -1903,7 +1903,7 @@
 			update: function() {
 				var value;
 				// Only *you* can prevent infinite loops
-				if ( this.updating || this.counterpart && this.counterpart.updating ) {
+				if ( this.updating ) {
 					return;
 				}
 				value = get( this.root, this.keypath );
@@ -1916,8 +1916,12 @@
 					this.updating = true;
 					// TODO maybe the case that `value === this.value` - should that result
 					// in an update rather than a set?
-					runloop.addInstance( this.otherInstance );
-					set( this.otherInstance, this.otherKeypath, value );
+					//we have already done this, stop infinite loop
+					if ( !( this.counterpart && this.counterpart.updating ) ) {
+						runloop.addInstance( this.otherInstance );
+						set( this.otherInstance, this.otherKeypath, value );
+					}
+					//this should be set for the binding even if the counterpart wasnt set. so that it lines up.
 					this.value = value;
 					// TODO will the counterpart update after this line, during
 					// the runloop end cycle? may be a problem...

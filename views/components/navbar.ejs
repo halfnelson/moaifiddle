@@ -9,15 +9,15 @@
     });
 
     var NavDropDown = Ractive.extend({
-        template: '<li ><a on-click="showPopup">{{#icon}}<i class="fa fa-{{icon}}">&nbsp;</i>{{/icon}}{{caption}}</a>{{>content}}</li>',
+        template: '<li ><a on-click="showPopup">{{#icon}}<i class="fa fa-{{icon}}">&nbsp;</i>{{/icon}}{{caption}}</a><modal visible="{{showing}}" >{{>content}}</modal></li>',
         data: {
             caption: 'Caption',
-            icon: false
+            icon: false,
+			showing: false
         },
         init: function() {
             this.on("showPopup",function() {
-                var popup = this.findComponent("modal");
-                popup.show();
+               this.set('showing',true);
             })
         }
     });

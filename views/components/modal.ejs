@@ -1,8 +1,8 @@
 <script>
     var Modal = Ractive.extend({
-        template: '<div class="modal"   style="display: {{ display }}">' +
+        template: '<div class="modal" style="display: {{ display }}">' +
                 '<div class="modalBackground" on-click="backgroundClick" style="position: absolute; top:0; left:0; bottom:0; right:0; z-index:100;"></div>' +
-                '<div class="modalcontent" on-click="contentClick" style="position: relative; z-index:101;">{{>content}}</div>' +
+                '<div class="modalcontent"  style="position: relative; z-index:101;">{{>content}}</div>' +
                 '</div>',
         data: {
             visible: false
@@ -15,14 +15,12 @@
 
         init:function() {
             this.on("backgroundClick", function(e) {
-                console.log("background click");
                 this.set('visible',false)
             });
         },
 
         show: function() {
             this.set('visible',true);
-            console.log("setting visible");
         }
 
     });
