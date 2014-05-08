@@ -130,6 +130,8 @@ body {
     -moz-box-sizing: border-box;
     cursor: pointer;
 }
+
+#editorNav .buttons li a.active,
 #editorNav .buttons li a:hover {
 
     background-color: #222;

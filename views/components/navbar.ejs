@@ -9,7 +9,7 @@
     });
 
     var NavDropDown = Ractive.extend({
-        template: '<li ><a on-click="showPopup">{{#icon}}<i class="fa fa-{{icon}}">&nbsp;</i>{{/icon}}{{caption}}</a><modal visible="{{showing}}" >{{>content}}</modal></li>',
+        template: '<li><a on-click="showPopup" class="{{showing ? "active" : ""}}">{{#icon}}<i class="fa fa-{{icon}}">&nbsp;</i>{{/icon}}{{caption}}</a><modal visible="{{showing}}" >{{>content}}</modal></li>',
         data: {
             caption: 'Caption',
             icon: false,
