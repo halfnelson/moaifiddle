@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="vendor/ractive.js"></script>
+    <script src="vendor/ractive-load.js"></script>
+</head>
+<body>
+
+<link rel='ractive' href='testcomponent.html'>
+<div id="editor"></div>
+
+<script language="JavaScript">
+   Ractive.load().then(function() {
+      var ractive = new Ractive({
+           el: 'editor',
+           template: '<testcomponent/><H1>456</H1>'
+       });
+   });
+
+
+</script>
+
+</body>
+</html>
