@@ -1,15 +1,11 @@
-<style>
-    h1 {
-        color: red;
-    }
-</style>
-
-<div  on-mousemove="move" on-mouseup="endMove" >
-    <div  style='width: {{ location }}%'>
-    </div>
-    <div class="splitter-vertical" style="left: {{splitter.location}}%" on-mousedown="splitter-begin-move" data-splitter="splitter"   ></div>
-    <div class="resizable player-wrapper" style='width: {{ 100 - splitter.location }}%'>
-    </div>
+<div class="splitter">
+    {{>content}}
 </div>
 
-        <h1>Testing 12 3</h1>
+<script>
+    component.exports = {
+        init: function() {
+            console.log(this.findAllComponents())
+        }
+    }
+</script>
