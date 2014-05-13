@@ -1,3 +1,27 @@
-<div  style="width: {{ location }}%">
-    {{>content}}
+<style>
+    .splitter-left {
+        height: 100%;
+        max-height: 100%;
+        position: absolute;
+        box-sizing: border-box;
+        -moz-box-sizing:border-box;
+    }
+</style>
+
+
+<div class="splitter-left" style="width: {{ location }}%">
+    {{>content}}{{location}}
 </div>
+
+<script>
+    component.exports = {
+        init: function() {
+            console.log("splitter left")
+        },
+        data: {
+
+        }
+
+    }
+
+</script>

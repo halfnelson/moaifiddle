@@ -1,1 +1,14 @@
-<div style="left: {{location}}%" on-mousedown="splitter-begin-move" ></div>
+<style>
+    .splitter-vertical {
+        width: 8px;
+        height: 100%;
+
+        position: absolute;
+        top: 5px;
+        bottom: 5px;
+        cursor: col-resize;
+        margin-left:-4px;
+    }
+</style>
+
+<div class="splitter-vertical" style="left: {{location}}%" ></div>

@@ -10,16 +10,25 @@
     <link rel='ractive' href='splitter-right.html'/>
 </head>
 <body>
+<style>
+    body,html {
+        height: 100%;
+    }
+
+    body {
+        padding: 0; margin: 0;
+    }
+</style>
 
 <script id="test" type="text/ractive">
     <splitter>
-        <splitter-left>
-            <div style="position:absolute; top:0; left:0; right:0;bottom:0; background-color: red;">
+        <splitter-left location="{{location}}">
+            <div style="position:absolute; top:0; left:0; right:0;bottom:0; background-color: blue;">
             left
             </div>
         </splitter-left>
-        <splitter-handle />
-        <splitter-right>
+        <splitter-handle location="{{location}}" />
+        <splitter-right location="{{location}}">
             <div style="position:absolute; top:0; left:0; right:0;bottom:0; background-color: red;">
             right
             </div>
