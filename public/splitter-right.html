@@ -5,21 +5,21 @@
     position: absolute;
     box-sizing: border-box;
     -moz-box-sizing:border-box;
+    right: -4px;
 }
 </style>
 
 <div class="splitter-right" style="width: {{ 100 - location }}%">
-    {{>content}}
+    {{>content}}{{location}}
 </div>
 
 <script>
     component.exports = {
         init: function() {
-            console.log("splitter right")
+            console.log("splitter right",this.get("location"))
         },
-        data: {
+        data: {}
 
-        }
 
     }
 

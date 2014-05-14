@@ -3375,6 +3375,7 @@
 			parentFragment = fragment.parent = fragment.owner.parentFragment;
 			// inherited properties
 			fragment.root = options.root;
+            fragment.contentRoot = options.contentRoot;
 			fragment.pNode = options.pNode;
 			fragment.pElement = options.pElement;
 			fragment.context = options.context;
@@ -6991,6 +6992,7 @@
 			element.fragment = new DomFragment( {
 				descriptor: descriptor.f,
 				root: element.root,
+                contentRoot: element.contentRoot,
 				pNode: node,
 				owner: element,
 				pElement: element
@@ -7820,6 +7822,7 @@
 			descriptor = element.descriptor = options.descriptor;
 			element.parent = options.pElement || parentFragment.pElement;
 			element.root = root = parentFragment.root;
+            element.contentRoot = parentFragment.contentRoot;
 			element.index = options.index;
 			element.lcName = descriptor.e.toLowerCase();
 			element.eventListeners = [];
@@ -7849,7 +7852,8 @@
 						keypath: getInnerContext( parentFragment ),
 						index: parentFragment.indexRefs,
 						events: create( null ),
-						root: root
+						root: root,
+                        contentRoot: element.contentRoot
 					}
 				} );
 			}
@@ -9691,14 +9695,19 @@
 				// TODO support dynamic partial switching
 				throw new Error( 'Partials must have a static reference (no expressions). This may change in a future version of Ractive.' );
 			}
-			descriptor = getPartialDescriptor( parentFragment.root, options.descriptor.r );
+
+            var fragroot = options.contentRoot || parentFragment.root
+
+
+			descriptor = getPartialDescriptor( fragroot, options.descriptor.r );
 			//we want to use the content from the parent ractive (for any further content partials)
 			if ( this.name == 'content' ) {
-				root = parentFragment.root._parent;
+				fragroot = fragroot._parent;
 			}
 			this.fragment = new DomFragment( {
 				descriptor: descriptor,
 				root: root,
+                contentRoot: fragroot,
 				pNode: parentFragment.pNode,
 				owner: this
 			} );
