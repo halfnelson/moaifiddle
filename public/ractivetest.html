@@ -6,8 +6,8 @@
     <script src="vendor/ractive-load.js"></script>
     <link rel='ractive' href='splitter.html'/>
     <link rel='ractive' href='splitter-handle.html'/>
-    <link rel='ractive' href='splitter-left.html'/>
-    <link rel='ractive' href='splitter-right.html'/>
+    <link rel='ractive' href='splitter-panel.html'/>
+
 </head>
 <body>
 <style>
@@ -21,18 +21,18 @@
 </style>
 
 <script id="test" type="text/ractive">
-    <splitter>
-        <splitter-left location="{{location}}">
+    <splitter type="horizontal">
+        <splitter-panel>
             <div style="position:absolute; top:0; left:0; right:0;bottom:0; background-color: blue;">
             left
             </div>
-        </splitter-left>
-        <splitter-handle location="{{location}}" />
-        <splitter-right location="{{location}}">
+        </splitter-panel>
+        <splitter-handle />
+        <splitter-panel>
             <div style="position:absolute; top:0; left:0; right:0;bottom:0; background-color: red;">
             right
             </div>
-        </splitter-right>
+        </splitter-panel>
     </splitter>
 </script>
 

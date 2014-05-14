@@ -1,0 +1,52 @@
+<style>
+    .splitter-left {
+        height: 100%;
+        max-height: 100%;
+        left: -4px;
+        position: absolute;
+        box-sizing: border-box;
+        -moz-box-sizing:border-box;
+    }
+
+    .splitter-right {
+        height: 100%;
+        max-height: 100%;
+        position: absolute;
+        box-sizing: border-box;
+        -moz-box-sizing:border-box;
+        right: -4px;
+    }
+</style>
+
+
+<div class="splitter-{{type}}" style="{{splitterstyle}}">
+    {{>content}}
+</div>
+
+<script>
+    component.exports = {
+        init: function() {
+            console.log("splitter left",this.get("location"))
+        },
+        computed: {
+           splitterstyle: function() {
+                var type = this.get("type");
+                var location = this.get("location");
+                if (type == "left") {
+                    return "width: "+location+"%;";
+                } else
+                if (type == "right") {
+                    return "width: "+(100-location)+"%;";
+                }
+            }
+        },
+        data: {
+            type: "left"
+        }
+
+
+
+
+    }
+
+</script>

@@ -1,8 +1,6 @@
 <style>
-    .splitter-vertical {
+    .splitter-horizontal {
         width: 8px;
-        height: 100%;
-
         position: absolute;
         top: 5px;
         bottom: 5px;
@@ -11,4 +9,24 @@
     }
 </style>
 
-<div class="splitter-vertical" style="left: {{location}}%" ></div>
+<div class="splitter-{{type}}" style="{{splitterStyle}}" ></div>
+
+
+<script>
+    component.exports = {
+
+        computed: {
+           splitterStyle: function() {
+               var type = this.get("type");
+               var location = this.get("location");
+               if (type == "horizontal") {
+                   return "left: "+location+"%;";
+               } else {
+                   return "top: "+location+"%;";
+               }
+           }
+        }
+
+
+    }
+</script>
