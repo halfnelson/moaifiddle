@@ -7,14 +7,25 @@
         cursor: col-resize;
         margin-left:-4px;
     }
+
+    .splitter-vertical {
+        height: 8px;
+        position: absolute;
+        left: 5px;
+        right: 5px;
+        cursor: row-resize;
+        margin-top:-4px;
+    }
 </style>
 
-<div class="splitter-{{type}}" style="{{splitterStyle}}" ></div>
+<div class="splitter-{{type}}" style="{{splitterStyle}}" on-mousedown="splitter-begin-move"></div>
 
 
 <script>
     component.exports = {
+        init: function() {
 
+        },
         computed: {
            splitterStyle: function() {
                var type = this.get("type");

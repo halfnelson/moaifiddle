@@ -2,6 +2,7 @@
 <html>
 <head>
     <title></title>
+    <script src="vendor/jquery-ui/js/jquery-1.10.2.js"></script>
     <script src="vendor/ractive.js"></script>
     <script src="vendor/ractive-load.js"></script>
     <link rel='ractive' href='splitter.html'/>
@@ -21,16 +22,16 @@
 </style>
 
 <script id="test" type="text/ractive">
-    <splitter type="horizontal">
+    <splitter type="vertical">
         <splitter-panel>
-            <div style="position:absolute; top:0; left:0; right:0;bottom:0; background-color: blue;">
-            left
+            <div style="width:100%; background-color: red; height:100%">
+            top
             </div>
         </splitter-panel>
         <splitter-handle />
         <splitter-panel>
-            <div style="position:absolute; top:0; left:0; right:0;bottom:0; background-color: red;">
-            right
+            <div style="width:100%; background-color: blue; height:100%">
+            bottom
             </div>
         </splitter-panel>
     </splitter>

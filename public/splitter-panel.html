@@ -16,6 +16,24 @@
         -moz-box-sizing:border-box;
         right: -4px;
     }
+
+    .splitter-top {
+        width: 100%;
+        max-width: 100%;
+        position: absolute;
+        box-sizing: border-box;
+        -moz-box-sizing:border-box;
+        top: -4px;
+    }
+
+    .splitter-bottom {
+        width: 100%;
+        max-width: 100%;
+        position: absolute;
+        box-sizing: border-box;
+        -moz-box-sizing:border-box;
+        bottom: -4px;
+    }
 </style>
 
 
@@ -37,6 +55,12 @@
                 } else
                 if (type == "right") {
                     return "width: "+(100-location)+"%;";
+                } else
+                if (type == "top") {
+                    return "height: "+location+"%;";
+                } else
+                if (type == "bottom") {
+                    return "height: "+(100-location)+"%;";
                 }
             }
         },
