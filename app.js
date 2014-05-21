@@ -12,6 +12,10 @@ var runner = require('./routes/runner');
 var app = express();
 var fs = require('fs');
 
+//ractify setup
+var ractify = require('ractify');
+var browserify = require('browserify-middleware');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
@@ -34,10 +38,16 @@ app.use(function(req, res, next) {
     next();
  });
 
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use(app.router);
+
+//app.get('/components/components-full.js', browserify(['./public/components/components'],{transform:[ractify]}));
+
+
 app.post('/snippet/edit', editor.show);
 app.post('/snippet', runner.snippet);
 app.post('/run', runner.index);

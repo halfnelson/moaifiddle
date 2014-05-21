@@ -13,7 +13,10 @@
     "cookie-parser": "~1.0.1",
     "body-parser": "~1.0.0",
     "debug": "~0.7.4",
-    "ejs": "^0.8.6"
+    "ejs": "^0.8.6",
+    "browserify-middleware": "~3.0.0",
+    "ractify": "~0.4.0",
+    "ractive": "~0.4.0"
   },
   "devDependencies": {
     "db-migrate": "~0.6.4",
