@@ -1,0 +1,26 @@
+<div class="modal" style="display: {{ display }}">
+    <div class="modalBackground" on-click="backgroundClick" style="position: absolute; top:0; left:0; bottom:0; right:0; z-index:100;"></div>
+    <div class="modalcontent"  style="position: relative; z-index:101;">{{>content}}</div>
+</div>
+
+<script>
+    component.exports = {
+        data: {
+            visible: false
+        },
+        computed: {
+            display: function() {
+                return  (this.get('visible')) ? "block" : "none";
+            }
+        },
+
+        init:function() {
+            this.on("backgroundClick", function(e) {
+                this.set('visible',false)
+            });
+        },
+        show: function() {
+            this.set('visible',true);
+        }
+    };
+</script>

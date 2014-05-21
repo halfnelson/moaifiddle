@@ -1,0 +1,15 @@
+<li><a on-click="showPopup" class="{{showing ? "active" : ""}}">{{#icon}}<i class="fa fa-{{icon}}">&nbsp;</i>{{/icon}}{{caption}}</a><modal visible="{{showing}}" >{{>content}}</modal></li>
+
+<script>
+    component.exports = {
+    data: {
+        caption: 'Caption',
+        icon: false,
+        showing: false
+    },
+    init: function() {
+        this.on("showPopup",function() {
+            this.set('showing',true);
+        })
+    }};
+</script>

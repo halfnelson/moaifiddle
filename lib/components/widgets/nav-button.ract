@@ -1,0 +1,10 @@
+<li on-click="click"><a>{{#icon}}<i class="fa fa-{{icon}}">&nbsp;</i>{{/icon}}{{caption}}</a></li>
+
+<script>
+    component.exports = {
+        data: {
+            caption: 'Caption',
+            icon: false
+        }
+    }
+</script>

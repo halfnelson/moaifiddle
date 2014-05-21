@@ -45,7 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(app.router);
 
-//app.get('/components/components-full.js', browserify(['./public/components/components'],{transform:[ractify]}));
+app.get('/bf/components.js', browserify('./lib/components/components.js',{transform:[ractify]}));
 
 
 app.post('/snippet/edit', editor.show);
