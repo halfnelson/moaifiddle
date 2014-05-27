@@ -6,18 +6,19 @@
     position: absolute;
     box-sizing: border-box;
     -moz-box-sizing:border-box;
+    width: 100%;
 }
 
 .code-wrapper {
     border: 1px solid #666;
 }
-
+/*
 .player-wrapper {
   right:-4px;
 }
-
+*/
 .code-wrapper {
-  left: -4px;
+/*  left: -4px; */
     background-color: #222;
 }
 
@@ -142,7 +143,7 @@ body {
 #player-console {
     width: 100%;
     position: absolute;
-    bottom: -4px;
+  /*  bottom: -4px;*/
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     border: 1px solid #666;
@@ -152,6 +153,7 @@ body {
     overflow-y: auto;
     font-size:12px;
     font-family: monaco,monospace;
+    height: 100%;
 }
 #player-console pre {
     margin: 2px 0;
@@ -174,7 +176,7 @@ body {
     position: absolute;
     width:100%;
     height:100%;
-    top: -4px;
+   /* top: -4px;*/
     background-color: #222;
 }
  #player-container {

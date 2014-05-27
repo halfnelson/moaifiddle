@@ -6,6 +6,7 @@
         bottom: 5px;
         cursor: col-resize;
         margin-left:-4px;
+        height: 100%;
     }
 
     .splitter-vertical {
@@ -15,6 +16,7 @@
         right: 5px;
         cursor: row-resize;
         margin-top:-4px;
+        width:100%;
     }
 </style>
 
