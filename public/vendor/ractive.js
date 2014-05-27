@@ -9696,7 +9696,7 @@
 				throw new Error( 'Partials must have a static reference (no expressions). This may change in a future version of Ractive.' );
 			}
 
-            var fragroot = options.contentRoot || parentFragment.root
+            var fragroot = parentFragment.contentRoot || parentFragment.root
 
 
 			descriptor = getPartialDescriptor( fragroot, options.descriptor.r );

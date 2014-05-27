@@ -309,18 +309,3 @@ img.pulse:hover {
     background-color: #111;
     font-size: 14px;
 }
-#shareDialog {
-    position: absolute;
-    z-index: 999;
-
-    background-color: #444;
-    padding:15px;
-}
-#shareDialog label {
-    margin-top: 10px;
-    display: inline-block;
-}
-
-#shareDialog h4 {
-    margin:10px 0 0 0;
-}

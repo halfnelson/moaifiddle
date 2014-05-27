@@ -1,29 +1,40 @@
-<script id="shareTemplate" type="text/ractive">
+<style>
+    #shareDialog {
+        position: absolute;
+        z-index: 999;
+
+        background-color: #444;
+        padding:15px;
+    }
+    #shareDialog label {
+        margin-top: 10px;
+        display: inline-block;
+    }
+
+    #shareDialog h4 {
+        margin:10px 0 0 0;
+    }
+</style>
+
+
     <div id="shareDialog">
         <label for="sharelink">Share Link</label><br>
-        <input type="text" name="sharelink" value="{{ link }}" on-focus="focus" /><br>
+        <input type="text" name="sharelink" id="sharelink" value="{{ link }}" on-focus="focus" /><br>
         <label for="embedinpage">Embed in page</label><br>
-        <input type="text" name="embedinpage" value="{{ iframe }}" on-focus="focus"/><br>
+        <input type="text" name="embedinpage" id="embedinpage" value="{{ iframe }}" on-focus="focus"/><br>
         <h4>Theme</h4>
         <label><input type="radio" name="{{theme}}" value="dark">dark</label>
         <label><input type="radio" name="{{theme}}" value="light">light</label>
     </div>
-</script>
-<script id="shareTemp2" type="text/ractive">
-    <h3>Hi</h3>
 
-</script>
 
 <script language="javascript">
 
-        var ShareDialog = Ractive.extend({
-            template: '#shareTemp2',
+        component.exports= {
             data: {
-
                 slug: "",
                 revision: 1,
                 theme: "light"
-
             },
             computed: {
                 link: function() {
@@ -40,18 +51,10 @@
             },
 
             init:function() {
-                console.log("init share");
                 this.on("focus",function(event) {
-                    window.setTimeout(function(){
-                        event.node.select();
-                    },1);
-
+                    window.setTimeout(function(){ event.node.select();},1);
                 });
             }
 
-        });
-
-        Ractive.components.sharedialog = ShareDialog;
-
-
+        };
 </script>
