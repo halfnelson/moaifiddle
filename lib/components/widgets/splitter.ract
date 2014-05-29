@@ -53,6 +53,13 @@
                     '-ms-user-select': 'none',
                     'user-select': 'none'
                 } );
+
+                //find all iframes and disable pointer events
+                $('iframe').each(function(idx,el) {
+                    el.style['pointer-events'] = 'none';
+                })
+
+
             });
 
             this.on("splitter-move", function(event) {
@@ -76,6 +83,9 @@
                     'user-select': 'initial'
                 });
                 this.fire("resize");
+                $('iframe').each(function(idx, el) {
+                    el.style['pointer-events'] = 'auto';
+                })
             });
         },
         data: {

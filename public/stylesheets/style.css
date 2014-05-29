@@ -68,10 +68,10 @@ body {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     position:absolute;
-    top: 50px;
+    top: 55px;
     left: 9px;
     right: 9px;
-    bottom: 9px;
+    bottom: 4px;
 }
 
 #editorContainer {
@@ -183,9 +183,9 @@ body {
     margin:0;
     padding:0;
     position:absolute;
-    top:4px;
+    top:0;
     left:0;
-    bottom:4px;
+    bottom:0;
     right:0
 }
 #player-console .cmd {

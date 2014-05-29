@@ -51,12 +51,12 @@
         </splitter-panel>
        <splitter-handle />
         <splitter-panel>
-            <div class="resizable player-wrapper" style='width: {{ 100 - splitter.location }}%'>
+            <div class="resizable player-wrapper">
             <div class="result-container">
             <div id="player-container" on-mousemove="splitter-move" on-mouseup="splitter-end-move">
                 <splitter type="vertical">
                   <splitter-panel>
-                    <iframe name="result" id="result" src="/run" style='pointer-events: {{ currentSplitter.dragging ? "none" : "auto" }}; height: {{hsplitter.location}}% ' >
+                    <iframe name="result" id="result" src="/run"  >
                     </iframe>
                   </splitter-panel>
                 <splitter-handle />
