@@ -43,17 +43,6 @@
 
 
 
-.splitter-vertical {
-    width: 8px;
-    height: 100%;
-
-    position: absolute;
-    top: 5px;
-    bottom: 5px;
-    cursor: col-resize;
-    margin-left:-4px;
-}
-
 body,html {
    height: 100%;
 }
@@ -201,39 +190,7 @@ body {
     background-color: #2a2a2d;
 }
 
-#fileBrowser {
-    position: absolute;
-    left: 4px;
-    color: #ccc;
-    top: 55px;
-    bottom: 4px;
-    background-color: #2a2a2d;
-    border: 1px solid #666;
-    width: 194px;
-    box-sizing:border-box;
-    -moz-box-sizing: border-box;
-}
 
-#fileBrowser .dir i.fa:before {
-    content: "\f0dd";
-}
-
-#fileBrowser ul {
-    list-style: none;
-    padding:0;
-    margin-left: 10px;
-    margin-top:0px;
-    font-size:14px;
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
-}
-
-#fileBrowser ul li {
-    padding-top: 2px;
-    padding-bottom: 2px;
-}
-#fileBrowser .dir.closed i.fa:before {
-    content: "\f0da";
-}
 
 #editorContainer .loading {
     height: 50px;
@@ -305,9 +262,3 @@ img.pulse:hover {
 
 }
 
-#fileBrowser .window-title {
-    font-family: sans-serif;
-    padding: 5px;
-    background-color: #111;
-    font-size: 14px;
-}

@@ -29,7 +29,7 @@
 </style>
 
 <div class="splitter">
-    <div class="splitter-inner {{type}}" on-mousemove="splitter-move" on-mouseup="splitter-end-move">
+    <div class="splitter-inner {{type}}" on-mousemove="splitter-move" >
     {{>content}}
     </div>
 </div>
@@ -46,6 +46,22 @@
 
             var splitter = this.findComponent("splitter-handle");
             var self = this;
+
+            function endMove(event) {
+                self.set('dragging', false);
+                $('body').css({ '-webkit-user-select': 'initial',
+                    '-moz-user-select': 'initial',
+                    '-ms-user-select': 'initial',
+                    'user-select': 'initial'
+                });
+                self.fire("resize");
+                $('iframe').each(function(idx, el) {
+                    el.style['pointer-events'] = 'auto';
+                });
+                document.removeEventListener("mouseup", endMove);
+
+            }
+
             splitter.on("splitter-begin-move", function(event) {
                 self.set('dragging',true);
                 $('body').css({ '-webkit-user-select': 'none',
@@ -58,12 +74,14 @@
                 $('iframe').each(function(idx,el) {
                     el.style['pointer-events'] = 'none';
                 })
-
-
+                //bind to document to detect mouse up
+                document.addEventListener("mouseup",endMove);
             });
 
             this.on("splitter-move", function(event) {
+
                 if (!this.get('dragging')) return;
+
                 var container = $(this.find(".splitter-inner"));
                 var offsetTop = container.offset().top;
                 var offsetLeft = container.offset().left;
@@ -75,18 +93,12 @@
                 }
             });
 
-            this.on("splitter-end-move", function(event) {
-                this.set('dragging', false);
-                $('body').css({ '-webkit-user-select': 'initial',
-                    '-moz-user-select': 'initial',
-                    '-ms-user-select': 'initial',
-                    'user-select': 'initial'
-                });
-                this.fire("resize");
-                $('iframe').each(function(idx, el) {
-                    el.style['pointer-events'] = 'auto';
-                })
-            });
+
+
+
+
+
+
         },
         data: {
             location: 35,

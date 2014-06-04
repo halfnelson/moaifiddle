@@ -4,190 +4,42 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/vendor/terminal/jquery.terminal.css' />
     <link rel='stylesheet' href="/vendor/font-awesome-4.0.3/css/font-awesome.min.css" />
-    <script src="/vendor/jquery-ui/js/jquery-1.10.2.js"></script>
-    <script src="/vendor/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/vendor/terminal/jquery.terminal-0.8.7.min.js"></script>
-    <script src="/vendor/underscore-min.js" type="text/javascript"></script>
-    <script src="/vendor/ractive.js"></script>
-    <script src="/bf/components.js"></script>
-
 </head>
 <body>
-
 
 <div id="editorContainer">
     <div class="loading">Loading...</div>
 </div>
 
-
-<script id="editorTemplate" type="text/ractive">
-    <div id="editorNav">
-        <a class="home-logo" href="/" title="Create a new fiddle"><i class="fa fa-pencil-square-o"></i> MoaiFiddle</a>
-        <ul class="buttons">
-            <navbutton caption="Play" icon="play" on-click="play" />
-            <navbutton caption="{{ slug  ? "Update" : "Save"}}" icon="pencil" on-click="save" />
-            {{ #slug}}
-            <navdropdown caption="Share" icon="share-square-o"><sharedialog slug="{{slug}}"></sharedialog></navdropdown>
-            {{/slug}}
-        </ul>
-
-    </div>
-
-    <div id="fileBrowserContainer"></div>
-
-
-    <div class="cols"  style="left: {{ filelist.visible ? 209 : 9}}px">
-    <splitter type="horizontal">
-       <splitter-panel>
-           <div class="code-wrapper">
-           <form id="runForm" method="post" action="/run" target="result">
-                <input type="hidden" value="<%= fiddle.slug || "" %>" name="slug">
-                <input type="hidden" value="<%= fiddle.revision || "" %>" name="revision">
-                <input type="hidden" value="" name="fiddle" id="fiddletext">
-                <div id="editor">t</div>
-
-            </form>
-            </div>
-        </splitter-panel>
-       <splitter-handle />
-        <splitter-panel>
-            <div class="resizable player-wrapper">
-            <div class="result-container">
-            <div id="player-container" on-mousemove="splitter-move" on-mouseup="splitter-end-move">
-                <splitter type="vertical">
-                  <splitter-panel>
-                    <iframe name="result" id="result" src="/run"  >
-                    </iframe>
-                  </splitter-panel>
-                <splitter-handle />
-                  <splitter-panel>
-                      <div id="player-console" ></div>
-                  </splitter-panel>
-                </splitter>
-            </div>
-            </div>
-            </div>
-        </splitter-panel>
-    </splitter>
-    </div>
-</script>
-
-
-
-
+<script src="/vendor/jquery-ui/js/jquery-1.10.2.js"></script>
+<script src="/vendor/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/vendor/terminal/jquery.terminal-0.8.7.min.js"></script>
+<script src="/vendor/underscore-min.js" type="text/javascript"></script>
+<script src="/vendor/ractive.js"></script>
 <script type="text/javascript" src="/moaijs/moaijs.js"></script>
 <script src="/javascripts/b64.js"></script>
 
-<% include ../components/filebrowser.ejs %>
+<script type="text/javascript" src="/bf/moaifiddle.js"></script>
 <script>
     //global fiddle !!!
     var fiddle = b64.base64ToStr(decodeURIComponent("<%- fiddle.encfiddle %>"));
 
+    moaifiddle.on('ready', function() {
+        this.setFiddleText(fiddle);
+        this.set("slug","<%= fiddle.slug %>");
+        this.set("revision","<%= fiddle.revision %>");
+        //load our files
+        this.fileBrowser.loadFilesFromJSON('/moaijs/moaiapp.rom.json'); //todo don't hardcode this, also demeter is getting cranky right now
+    });
 
+    function consoleWrite(x) {
+        moaifiddle.console.echo(x);
+    }
 
-
-
-
+    function consoleError(x) {
+        moaifiddle.console.error(x);
+    }
 </script>
-
-<script >
-
-    var ractive = new Ractive({
-        el: 'editorContainer',
-        template: '#editorTemplate',
-        twoway:false,
-        data: {
-            filelist: {
-                visible: true,
-                width: 209
-            },
-            currentDropdown: "None"
-        },
-        complete: function() {
-            //bind some vars
-            this.slug = $('#runForm').find('input[name="slug"]').val();
-            this.set("slug",this.slug);
-
-            $('#editor').text(fiddle);
-
-            var editor = ace.edit("editor");
-
-            editor.setTheme("ace/theme/monokai");
-            var session = editor.getSession();
-
-            editor.setShowPrintMargin(false);
-            session.setMode("ace/mode/lua");
-            session.setUseWrapMode(true);
-            this.editor = editor;
-
-            this.console = $('#player-console').terminal(function(command, term) {
-                this.fire('terminal-input',command,term);
-            }.bind(this),
-                    {
-                        greetings: 'MoaiJS Player v1.01',
-                        name: 'fiddle_console',
-                        prompt: 'lua> '});
-
-            this.console.disable(); //it grabs focus
-            this.editor.focus();
-
-            this.fileBrowser = createFileBrowser();
-        }
-    });
-    ractive.on("terminal-input",
-            function(command, term) {
-                window.frames['result'].sendCommand(command);
-
-            }
-    );
-
-    ractive.on("splitter-end-move", function(event) {
-        this.set('currentSplitter.dragging', false);
-        $('body').css({ '-webkit-user-select': 'initial',
-            '-moz-user-select': 'initial',
-            '-ms-user-select': 'initial',
-            'user-select': 'initial'
-        } )
-        this.editor.resize();
-    });
-
-    ractive.on("play", function(event) {
-        var fiddle = this.editor.getSession().getValue();
-        $(this.el).find('#fiddletext').val(fiddle);
-        $(this.el).find('#runForm').first().submit();
-
-    });
-
-    ractive.on("save", function() {
-        var fiddle = this.editor.getSession().getValue();
-        var slug = this.slug;
-        $.post('/'+slug,{fiddle:fiddle})
-                .done(function(data) {
-                    var newLoc = "/";
-                    if (data.slug) {
-                        newLoc = newLoc + encodeURIComponent(data.slug);
-
-                        if (data.revision) {
-                            newLoc = newLoc + "/" + encodeURIComponent(data.revision);
-                        }
-                    }
-                    window.location.pathname = newLoc;
-                });
-    });
-
-
-function consoleWrite(x) {
-    ractive.console.echo(x);
-}
-
-function consoleError(x) {
-    ractive.console.error(x);
-}
-
-
-</script>
-
-
 
 </body>
 </html>

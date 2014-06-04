@@ -1,0 +1,43 @@
+<div id="editorNav">
+    <a class="home-logo" href="/" title="Create a new fiddle"><i class="fa fa-pencil-square-o"></i> MoaiFiddle</a>
+    <ul class="buttons">
+        <navbutton caption="Play" icon="play" on-click="play" />
+        <navbutton caption="{{ slug  ? 'Update' : 'Save'}}" icon="pencil" on-click="save" />
+        {{ #slug}}
+        <navdropdown caption="Share" icon="share-square-o"><sharedialog slug="{{slug}}" revision="{{revision}}"></sharedialog></navdropdown>
+        {{/slug}}
+    </ul>
+
+</div>
+
+<div id="fileBrowserContainer"><filebrowser></filebrowser></div>
+
+
+<div class="cols"  style="left: {{ filelist.visible ? 209 : 9}}px">
+    <splitter type="horizontal">
+        <splitter-panel>
+            <div class="code-wrapper">
+              <div id="editor"></div>
+            </div>
+        </splitter-panel>
+        <splitter-handle />
+        <splitter-panel>
+            <div class="resizable player-wrapper">
+                <div class="result-container">
+                    <div id="player-container">
+                        <splitter type="vertical">
+                            <splitter-panel>
+                                <iframe name="result" id="result" src="/run"  >
+                                </iframe>
+                            </splitter-panel>
+                            <splitter-handle />
+                            <splitter-panel>
+                                <div id="player-console" ></div>
+                            </splitter-panel>
+                        </splitter>
+                    </div>
+                </div>
+            </div>
+        </splitter-panel>
+    </splitter>
+</div>
