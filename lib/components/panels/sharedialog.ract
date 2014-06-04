@@ -18,7 +18,7 @@
 
 
     <div id="shareDialog">
-        <label for="sharelink">Share Link</label><br>
+        <label for="sharelink">Share Link {{revision}}</label><br>
         <input type="text" name="sharelink" id="sharelink" value="{{ link }}" on-focus="focus" /><br>
         <label for="embedinpage">Embed in page</label><br>
         <input type="text" name="embedinpage" id="embedinpage" value="{{ iframe }}" on-focus="focus"/><br>

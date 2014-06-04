@@ -1,0 +1,32 @@
+<div id="editor"></div>
+
+<script>
+
+    component.exports = {
+        complete: function () {
+            var editor = ace.edit("editor");
+
+            editor.setTheme("ace/theme/monokai");
+            var session = editor.getSession();
+
+            editor.setShowPrintMargin(false);
+            session.setMode("ace/mode/lua");
+            session.setUseWrapMode(true);
+            this.editor = editor;
+        },
+        focus: function() {
+           this.editor.focus();
+        },
+        setText: function(text) {
+            this.editor.getSession().setValue(text);
+        },
+        getText: function() {
+            return this.editor.getSession().getValue();
+        }
+
+
+
+
+    }
+
+</script>
