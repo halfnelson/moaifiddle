@@ -6,6 +6,10 @@
         background-color: #444;
         padding:15px;
     }
+
+    #shareDialog input[type="text"] {
+        width: 250px;
+    }
     #shareDialog label {
         margin-top: 10px;
         display: inline-block;
@@ -18,7 +22,7 @@
 
 
     <div id="shareDialog">
-        <label for="sharelink">Share Link {{revision}}</label><br>
+        <label for="sharelink">Share Link</label><br>
         <input type="text" name="sharelink" id="sharelink" value="{{ link }}" on-focus="focus" /><br>
         <label for="embedinpage">Embed in page</label><br>
         <input type="text" name="embedinpage" id="embedinpage" value="{{ iframe }}" on-focus="focus"/><br>
@@ -32,8 +36,6 @@
 
         component.exports= {
             data: {
-                slug: "",
-                revision: 1,
                 theme: "light"
             },
             computed: {

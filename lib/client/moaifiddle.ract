@@ -3,8 +3,10 @@
     <ul class="buttons">
         <navbutton caption="Play" icon="play" on-click="play" />
         <navbutton caption="{{ slug  ? 'Update' : 'Save'}}" icon="pencil" on-click="save" />
+
         {{#slug}}
-        <navdropdown caption="Share" icon="share-square-o"><sharedialog slug="{{slug}}" revision="{{revision}}"></sharedialog></navdropdown>
+
+        <navdropdown caption="Share" icon="share-square-o"><sharedialog ></sharedialog></navdropdown>
         {{/slug}}
     </ul>
 
