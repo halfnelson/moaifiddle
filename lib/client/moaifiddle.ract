@@ -16,7 +16,7 @@
 
 
 <div class="cols"  style="left: {{ filelist.visible ? 209 : 9}}px">
-    <splitter type="horizontal">
+    <splitter type="horizontal" on-resize="resize">
         <splitter-panel>
             <div class="code-wrapper">
               <editor />

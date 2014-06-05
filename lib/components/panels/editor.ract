@@ -22,6 +22,9 @@
         },
         getText: function() {
             return this.editor.getSession().getValue();
+        },
+        resize: function() {
+            this.editor.resize();
         }
 
 

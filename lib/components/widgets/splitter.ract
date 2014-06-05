@@ -92,16 +92,9 @@
                     this.set('location',((event.original.pageY - offsetTop ) /container.outerHeight()) *100);
                 }
             });
-
-
-
-
-
-
-
         },
         data: {
-            location: 35,
+            location: 50,
             dragging: false,
             type: "horizontal"
         }
