@@ -20,7 +20,7 @@
         list-style: none;
         padding:0;
         margin-left: 10px;
-        margin-top:0px;
+        margin-top:0;
         font-size:14px;
         font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
     }
@@ -61,19 +61,18 @@
 
     component.exports = {
         data: {
-            isClosed: [],
+            isOpen: [],
             files: [
                 {
                     name: 'loading...'
                 }
             ],
-
             fullPath: function (fileInfo) {
                 return fileInfo.parent + (fileInfo.parent == '/' ? '' : '/') + fileInfo.name;
             },
             closed: function (path) {
-                var exp = this.get('isClosed');
-                return exp.indexOf(path) >= 0;
+                var exp = this.get('isOpen');
+                return exp.indexOf(path) < 0;
             },
             visible: function (parentPath) {
                 if (parentPath == "/") return true;
@@ -137,11 +136,7 @@
                 var files = _(filePackage.files).map(function (f) {
                     return {name: f.filename}
                 });
-                var closed = _(filePackage.directories).map(function (f) {
-                    return "/" + f
-                });
                 this.set('files', files);
-                this.set('isClosed', closed);
             }.bind(this));
         },
         complete: function () {
@@ -165,12 +160,12 @@
                 var path = target.attr("data-path");
 
 
-                var idx = this.get('isClosed').indexOf(path);
+                var idx = this.get('isOpen').indexOf(path);
 
                 if (idx >= 0) {
-                    this.get('isClosed').splice(idx, 1);
+                    this.get('isOpen').splice(idx, 1);
                 } else {
-                    this.get('isClosed').push(path);
+                    this.get('isOpen').push(path);
                 }
             });
         }
