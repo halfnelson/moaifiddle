@@ -1,0 +1,24 @@
+<style>
+
+</style>
+
+
+
+<script>
+    component.exports = {
+
+        data: {
+            visible: false,
+            filename: '',
+            type: 'text'
+        },
+        computed: {
+
+        },
+
+        init:function() {
+           
+        }
+
+    }
+</script>

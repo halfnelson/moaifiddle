@@ -29,7 +29,7 @@
         this.set("slug","<%= fiddle.slug || '' %>");
         this.set("revision","<%= fiddle.revision || 1 %>");
         //load our files
-        this.fileBrowser.loadFilesFromJSON('/moaijs/moaiapp.rom.json'); //todo don't hardcode this, also demeter is getting cranky right now
+        this.loadFileSystem('/moaijs/moaiapp.rom');
     });
 
     function consoleWrite(x) {

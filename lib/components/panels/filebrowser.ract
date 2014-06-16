@@ -47,7 +47,7 @@
     <div class="window-title">Filesystem /</div>
     <ul>
         {{# fileList( files ) }}
-        <li style="padding-left: {{depth * 5}}px; display:{{ visible(parent) ? "list-item":"none" }}; "
+        <li style="padding-left: {{depth * 5}}px; display:{{ visible(parent) ? 'list-item':'none' }}; "
         class="{{dir ? "dir" :"file"}} {{closed(fullPath(this)) ? "closed": ""}}"
         data-path="{{fullPath(this)}}"
         ><i class="fa"></i> {{name}}</li>
@@ -62,11 +62,7 @@
     component.exports = {
         data: {
             isOpen: [],
-            files: [
-                {
-                    name: 'loading...'
-                }
-            ],
+
             fullPath: function (fileInfo) {
                 return fileInfo.parent + (fileInfo.parent == '/' ? '' : '/') + fileInfo.name;
             },
@@ -131,24 +127,26 @@
                 return fs;
             }
         },
-        loadFilesFromJSON: function(filejson) {
-            $.getJSON(filejson, function (filePackage) {
-                var files = _(filePackage.files).map(function (f) {
-                    return {name: f.filename}
-                });
-                this.set('files', files);
-            }.bind(this));
-        },
+
+
         complete: function () {
             $("#fileBrowser").on("click", "ul li.dir", function (event) {
                 this.fire("toggle", event);
+            }.bind(this));
+
+            $("#fileBrowser").on("click", "ul li.file", function (event) {
+                var target = $(event.target);
+                if (!target.hasClass("file")) {
+                    target = $(event.target).parents("li.file").first();
+                }
+                if (!target) return;
+                var path = target.attr("data-path");
+                this.fire("open",path);
             }.bind(this))
         },
         init: function () {
 
-            this.on("open", function () {
-                console.log("open")
-            });
+
 
             this.on("toggle", function (event) {
 
