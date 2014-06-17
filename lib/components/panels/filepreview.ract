@@ -1,6 +1,53 @@
 <style>
+#fileViewerWindow {
+    position: absolute;
+    top: 40px;
+    left: 300px;
+    right: 300px;
+    bottom: 30px;
+    background-color: #222;
+    border: 1px solid #666;
+    z-index:999;
+
+}
+
+    #fileViewer {
+        width:100%;
+        position: absolute;
+        top: 28px;
+        bottom: 0;
+
+        background-color: #2a2a2d;
+        overflow: auto;
+    }
+
+    #fileViewerWindow > h1 {
+        font-family: sans-serif;
+        padding: 5px;
+        background-color: #111;
+        font-size: 14px;
+        margin: 0;
+        color: #ccc;
+        font-weight: normal;
+        height: 18px;
+    }
 
 </style>
+
+<div id="fileViewerWindow" style="display: {{display}}">
+    <h1>{{filename}}</h1>
+    <div id="fileViewer">
+        <h1>Pretend Contents</h1>
+        <h1>Pretend Contents</h1>
+        <h1>Pretend Contents</h1>
+        <h1>Pretend Contents</h1>
+        <h1>Pretend Contents</h1>
+        <h1>Pretend Contents</h1>
+        <h1>Pretend Contents</h1>
+        <h1>Pretend Contents</h1>
+
+    </div>
+</div>
 
 
 
@@ -8,16 +55,18 @@
     component.exports = {
 
         data: {
-            visible: false,
-            filename: '',
+            visible: true,
+            filename: 'untitled',
             type: 'text'
         },
         computed: {
-
+            display: function() {
+                return this.get('visible') ? "block" : "none";
+            }
         },
 
         init:function() {
-           
+
         }
 
     }

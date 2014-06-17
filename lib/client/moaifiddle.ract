@@ -40,4 +40,6 @@
 
         </splitter-panel>
     </splitter>
+
 </div>
+<filepreview />
