@@ -35,16 +35,32 @@
 </style>
 
 <div id="fileViewerWindow" style="display: {{display}}">
-    <h1>{{filename}}</h1>
+    <h1>{{file.filename}}</h1>
     <div id="fileViewer">
-        <h1>Pretend Contents</h1>
-        <h1>Pretend Contents</h1>
-        <h1>Pretend Contents</h1>
-        <h1>Pretend Contents</h1>
-        <h1>Pretend Contents</h1>
-        <h1>Pretend Contents</h1>
-        <h1>Pretend Contents</h1>
-        <h1>Pretend Contents</h1>
+        {{# isType('text')}}
+           <h1>text</h1>
+            {{filedata}}
+        {{/end text}}
+
+        {{# isType('image')}}
+           <h1>image</h1>
+        {{/end image}}
+
+        {{# isType('audio')}}
+            <h1>audio</h1>
+        {{/end audio}}
+
+        {{# isType('font')}}
+            <h1>font</h1>
+            {{filedata}}
+        {{/end font}}
+
+        {{# isType('unknown')}}
+            <h1>unknown</h1>
+            {{file.data}}
+            Size: {{ file.data.length }} bytes
+        {{/end unknown}}
+
 
     </div>
 </div>
@@ -52,20 +68,56 @@
 
 
 <script>
+    var typemap = {
+        'ttf': 'font',
+        'bmp': 'image',
+        'png': 'image',
+        'jpg': 'image',
+        'jpeg': 'image',
+        'ogg': 'audio',
+        'wav': 'audio',
+        'mp3': 'audio',
+        'lua': 'text',
+        'json': 'text',
+        'xml': 'text',
+        'conf': 'text',
+        'cfg': 'text',
+        'txt': 'text'
+    };
+
+
     component.exports = {
 
         data: {
             visible: true,
-            filename: 'untitled',
-            type: 'text'
+
+            isType: function(type) {
+                return this.get('type') == type
+            }
         },
         computed: {
             display: function() {
                 return this.get('visible') ? "block" : "none";
+            },
+            type: function() {
+                var filename = this.get('file.filename');
+                var parts = filename.split('.');
+                var ext = _(parts).last().toLowerCase();
+                return typemap[ext] || 'unknown';
+
+
             }
+
+
         },
 
         init:function() {
+
+        },
+
+        showFile: function(file) {
+            this.set('visible',true);
+            this.set('file',file);
 
         }
 
