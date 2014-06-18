@@ -12,13 +12,24 @@
 }
 
     #fileViewer {
-        width:100%;
+        left: 0;
+        right: 0;
         position: absolute;
         top: 28px;
         bottom: 0;
 
         background-color: #2a2a2d;
         overflow: auto;
+        color: #CCC;
+        padding: 10px;
+    }
+
+    #fileViewerWindow .closeButton{
+        position: absolute;
+        right: 5px;
+        top: 3px;
+        color: #CCC;
+        cursor: pointer;
     }
 
     #fileViewerWindow > h1 {
@@ -35,7 +46,9 @@
 </style>
 
 <div id="fileViewerWindow" style="display: {{display}}">
+    {{#file}}
     <h1>{{file.filename}}</h1>
+    <span on-click="close" class="closeButton"><i class="fa fa-times">&nbsp;</i></span>
     <div id="fileViewer">
         {{# isType('text')}}
            <h1>text</h1>
@@ -56,13 +69,14 @@
         {{/end font}}
 
         {{# isType('unknown')}}
-            <h1>unknown</h1>
-            {{file.data}}
-            Size: {{ file.data.length }} bytes
+            <h3>Unknown Format</h3>
+            Size: {{ file.data.length }} Bytes
+
         {{/end unknown}}
 
 
     </div>
+    {{/file}}
 </div>
 
 
@@ -89,8 +103,8 @@
     component.exports = {
 
         data: {
-            visible: true,
-
+            visible: false,
+            file: {},
             isType: function(type) {
                 return this.get('type') == type
             }
@@ -104,21 +118,24 @@
                 var parts = filename.split('.');
                 var ext = _(parts).last().toLowerCase();
                 return typemap[ext] || 'unknown';
-
-
+            },
+            size: function() {
+                return this.get('file.data').length;
             }
 
 
         },
 
         init:function() {
-
+            this.on('close',function(){
+                this.set('visible', false);
+                this.set('file',null);
+            })
         },
 
         showFile: function(file) {
             this.set('visible',true);
             this.set('file',file);
-
         }
 
     }

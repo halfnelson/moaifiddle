@@ -50,7 +50,7 @@
         <li style="padding-left: {{depth * 5}}px; display:{{ visible(parent) ? 'list-item':'none' }}; "
         class="{{dir ? "dir" :"file"}} {{closed(fullPath(this)) ? "closed": ""}}"
         data-path="{{fullPath(this)}}"
-        ><i class="fa"></i> {{name}}</li>
+        ><i class="fa"></i> {{name}}  </li>
         {{/ end file list}}
     </ul>
 </div>
@@ -69,6 +69,9 @@
             closed: function (path) {
                 var exp = this.get('isOpen');
                 return exp.indexOf(path) < 0;
+            },
+            highlight: function(path) {
+                return (this.get('highlights') || {})[path]
             },
             visible: function (parentPath) {
                 if (parentPath == "/") return true;
