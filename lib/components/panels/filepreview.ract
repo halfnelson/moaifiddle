@@ -52,7 +52,7 @@
     <div id="fileViewer">
         {{# isType('text')}}
            <h1>text</h1>
-            {{filedata}}
+            {{asString}}
         {{/end text}}
 
         {{# isType('image')}}
@@ -100,6 +100,13 @@
     };
 
 
+    function arrayToString(arr) {
+            console.log("convert to str ",arr);
+        console.log((String.fromCharCode).apply(arr));
+            return (String.fromCharCode).apply(arr);
+
+    }
+
     component.exports = {
 
         data: {
@@ -121,7 +128,11 @@
             },
             size: function() {
                 return this.get('file.data').length;
+            },
+            asString: function() {
+                return arrayToString(this.get("file.data"));
             }
+
 
 
         },
@@ -130,6 +141,7 @@
             this.on('close',function(){
                 this.set('visible', false);
                 this.set('file',null);
+              //  this.fire('close');
             })
         },
 

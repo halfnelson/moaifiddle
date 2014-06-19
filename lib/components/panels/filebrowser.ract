@@ -45,12 +45,13 @@
 
 <div id="fileBrowser">
     <div class="window-title">Filesystem /</div>
+
     <ul>
         {{# fileList( files ) }}
-        <li style="padding-left: {{depth * 5}}px; display:{{ visible(parent) ? 'list-item':'none' }}; "
+        <li style="padding-left: {{depth * 5}}px; display:{{ visible(parent) ? 'list-item':'none' }};  color: {{highlight(fullPath(this))}}  "
         class="{{dir ? "dir" :"file"}} {{closed(fullPath(this)) ? "closed": ""}}"
         data-path="{{fullPath(this)}}"
-        ><i class="fa"></i> {{name}}  </li>
+        ><i class="fa"></i> {{name}}   </li>
         {{/ end file list}}
     </ul>
 </div>
@@ -60,9 +61,10 @@
 <script language="javascript">
 
     component.exports = {
+        debug: true,
         data: {
             isOpen: [],
-
+            colors: {},
             fullPath: function (fileInfo) {
                 return fileInfo.parent + (fileInfo.parent == '/' ? '' : '/') + fileInfo.name;
             },
@@ -71,7 +73,7 @@
                 return exp.indexOf(path) < 0;
             },
             highlight: function(path) {
-                return (this.get('highlights') || {})[path]
+                return (this.get('colors') || {})[path] || "none";
             },
             visible: function (parentPath) {
                 if (parentPath == "/") return true;
@@ -149,7 +151,9 @@
         },
         init: function () {
 
-
+            this.observe('colors',function() {
+                console.log(this.get('colors'));
+            })
 
             this.on("toggle", function (event) {
 
