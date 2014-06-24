@@ -43,6 +43,12 @@
         height: 18px;
     }
 
+    .trans {
+        background-image: url('/images/transback.svg');
+        display: inline-block;
+        line-height: 0;
+
+    }
 </style>
 
 <div id="fileViewerWindow" style="display: {{display}}">
@@ -57,18 +63,20 @@
         {{/end text}}
 
         {{# isType('image')}}
-           <h1>image</h1>
-
-            <img src="{{asObjectUrl}}"></img>
+           <div class="trans"><img src="{{asObjectUrl}}" style="width: 100%; height: 100%" /></div>
         {{/end image}}
 
         {{# isType('audio')}}
             <h1>audio</h1>
+            <audio controls src="{{asObjectUrl}}"></audio>
         {{/end audio}}
 
         {{# isType('font')}}
             <h1>font</h1>
-            {{filedata}}
+
+            <p style="font-family: 'DemoFont';">
+                The quick red fox jumped over the lazy red dog
+            </p>
         {{/end font}}
 
         {{# isType('unknown')}}
@@ -172,6 +180,28 @@
         showFile: function(file) {
             this.set('visible',true);
             this.set('file',file);
+
+            if (this.get('type') == 'font') {
+                //remove our old one
+                var oldstyle = document.getElementById('demofontstyle');
+                if (oldstyle) {
+                    oldstyle.parentNode.removeChild(oldstyle);
+                }
+
+                //add our style
+                var stylefrag = " @font-face { font-family: 'DemoFont';  src: url('"+this.get('asObjectUrl')+"') format('truetype');" +
+                                " font-weight: normal; font-style: normal;";
+
+
+                var styletag = $( "<style id='demofontstyle'> "+ stylefrag + "</style>");
+
+                $('head').prepend(styletag);
+
+
+            }
+
+
+
         }
 
     }
