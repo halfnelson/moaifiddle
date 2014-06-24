@@ -57,26 +57,39 @@
     <span on-click="close" class="closeButton"><i class="fa fa-times">&nbsp;</i></span>
     <div id="fileViewer">
         {{# isType('text')}}
-            <code>
+            <pre><code>
             {{asString}}
-            </code>
+                </code>
+            </pre>
         {{/end text}}
+        {{# isType('lua') }}
+        <pre><code>{{{highlighted}}}</code></pre>
+        {{/end lua}}
 
         {{# isType('image')}}
            <div class="trans"><img src="{{asObjectUrl}}" style="width: 100%; height: 100%" /></div>
         {{/end image}}
 
         {{# isType('audio')}}
-            <h1>audio</h1>
-            <audio controls src="{{asObjectUrl}}"></audio>
+            <div style="font-family: monospace">
+            <span>File Type: Audio</span><br>
+            <span>File Size: {{file.data.length}} bytes</span><br>
+                </div>
+            <br>
+
+            <audio controls src="{{asObjectUrl}}" style="width:100%"></audio>
         {{/end audio}}
 
         {{# isType('font')}}
-            <h1>font</h1>
+            {{# ([8,10,12,14,16,18,20,22,26,30,35,40]) }}
 
-            <p style="font-family: 'DemoFont';">
-                The quick red fox jumped over the lazy red dog
-            </p>
+                <span style="font-family: monospace;">at {{this}} px:</span><br>
+            <span style="font-family: 'DemoFont'; font-size: {{this}}px; ">
+                The quick red fox jumped over the lazy brown dog
+            </span>
+            <br>
+
+            {{/end loop}}
         {{/end font}}
 
         {{# isType('unknown')}}
@@ -102,7 +115,7 @@
         'ogg': {type: 'audio', mime: 'audio/ogg'},
         'wav': {type: 'audio', mime: 'audio/vnd.wave'},
         'mp3': {type: 'audio', mime: 'audio/mpeg'},
-        'lua': {type: 'text', mime: 'text/plain' },
+        'lua': {type: 'lua', mime: 'text/plain' },
         'json': {type: 'text', mime: 'text/plain' },
         'xml': {type: 'text', mime: 'text/plain' },
         'conf': {type: 'text', mime: 'text/plain' },
@@ -151,6 +164,10 @@
             size: function() {
                 return this.get('file.data').length;
             },
+            highlighted: function() {
+                var str = this.get('asString');
+                return hljs.highlight('lua',str).value;
+            },
             asString: function() {
                 return arrayToString(this.get("file.data"));
             },
@@ -196,13 +213,7 @@
                 var styletag = $( "<style id='demofontstyle'> "+ stylefrag + "</style>");
 
                 $('head').prepend(styletag);
-
-
             }
-
-
-
         }
-
     }
 </script>
