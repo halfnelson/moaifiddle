@@ -4,6 +4,8 @@ var Fiddle = require('../lib/models/fiddle');
 var D = require('d.js');
 var console = require('console');
 var b64 = require('../public/javascripts/b64.js');
+var fs = require('fs');
+var defaultFiddle = fs.readFileSync(__dirname+ "/../data/defaultfiddle.lua", 'utf8');
 
 var show = function(req, res, next) {
     var slug = req.params.slug;
@@ -16,6 +18,9 @@ var show = function(req, res, next) {
         var f = new Fiddle();
         if (req.body.fiddle) {
             f.fiddle = req.body.fiddle;
+        } else {
+            //default fiddle
+            f.fiddle = defaultFiddle;
         }
         fiddlePromise = D.resolved(f);
     }

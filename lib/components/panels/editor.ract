@@ -11,6 +11,11 @@
 
             editor.setShowPrintMargin(false);
             session.setMode("ace/mode/lua");
+            editor.setOptions({
+                enableBasicAutocompletion: true,
+                enableSnippets: true
+            });
+
             session.setUseWrapMode(true);
             this.editor = editor;
         },
