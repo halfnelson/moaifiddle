@@ -161,6 +161,10 @@ function LoadFileSystemJson(fsJsonUrl) {
     xhr.responseType = "json";
     xhr.onload = function(event) {
         var packageInfo = xhr.response;
+        if (typeof packageInfo == "string") {
+          //safari and older browsers can't do responseType=json :(
+          packageInfo = JSON.parse(packageInfo);
+        }
         d.resolve(packageInfo);
     };
     xhr.onerror = function(event) {
