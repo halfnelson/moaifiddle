@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 
 var editor = require('./routes/edit');
 var runner = require('./routes/runner');
+var rom = require('./routes/rom');
 
 var app = express();
 var fs = require('fs');
@@ -53,6 +54,8 @@ app.post('/snippet', runner.snippet);
 app.post('/run', runner.index);
 app.get('/run', runner.index);
 app.get('/:slug/:revision/embed', runner.embed);
+app.get('/:rom/fiddle.rom.json', rom.json);
+app.get('/:rom/fiddle.rom', rom.rom);
 app.get('/:slug/:revision', editor.show);
 app.get('/:slug', editor.show);
 app.get('/', editor.show);
