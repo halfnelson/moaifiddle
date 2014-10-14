@@ -741,7 +741,7 @@ function MoaiPlayer(element, skipTemplate) {
 		console.log("width",width,"height",height,"portrait",(height > width));
 		el.find('.moai-canvas-wrapper').first().toggleClass("portrait", (height > width));
 	}
-
+    this.onResolutionChange = onResolutionChange;
 	this.onError = function(err) {
 		console.log("ERROR: ",err);
 	};
@@ -769,7 +769,7 @@ function MoaiPlayer(element, skipTemplate) {
 
 
     this.initMoai = function() {
-        this.moai = new MoaiJS(canvasEl[0], ram * 1024 * 1024, onTitleChange, onStatusChange, onError.bind(this), onPrint.bind(this), onResolutionChange);
+        this.moai = new MoaiJS(canvasEl[0], ram * 1024 * 1024, onTitleChange, onStatusChange, onError.bind(this), onPrint.bind(this), this.onResolutionChange.bind(this));
     }
 }
 

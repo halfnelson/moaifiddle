@@ -25,7 +25,22 @@
     text-align: center;
     display:table-row;
 }
+.moai-console-wrapper
+{
+    background-color: #202025;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-align: left;
+    display:table-row;
+}
 
+.moai-console-wrapper .moai-console {
+    max-height: 100%;
+    font-family: monaco,monospace;
+    overflow: auto;
+    margin: 0;
+}
 
 .moai-canvas-wrapper canvas {
     width: 100%;
@@ -67,6 +82,17 @@
     text-align: right;
     padding-right: 5px;
 }
+
+.moai-status {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    font-family: Helvetica,'Trebuchet MS','Liberation Sans',FreeSans,sans-serif;
+    font-size: 24px;
+    text-shadow: 1px 1px 6px;
+}
+
 .moai-footer
 {
    /*display: none;*/

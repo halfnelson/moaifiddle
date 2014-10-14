@@ -22,7 +22,7 @@
 <div id="moaiplayer" class="moai-player"  data-title="MOAI Player" data-ram="64">
     <div class="moai-window code">
         <div class="moai-header">
-            <span class="moai-title">MOAI</span><span class="moai-status">Loading..</span>
+            <span class="moai-title">MOAI</span>
             <div style="clear:both"></div>
         </div>
         <div class="moai-info">
@@ -38,6 +38,7 @@
             <% } %>
 
         </div>
+        <div class="moai-console-wrapper" style="display:none"><span class="moai-status">Loading..</span><pre class="moai-console"></pre></div>
         <div class="moai-canvas-wrapper" style="display: none;"><canvas class="moai-canvas"  tabindex="1"></canvas></div>
         <div class="moai-footer">
             <i id="moai-play" class="fa fa-play">&nbsp;</i>
@@ -83,6 +84,24 @@
 
     hljs.initHighlightingOnLoad();
     var player = new MoaiPlayer($("#moaiplayer"),true);
+    //override default handling of hideinfo since we handle it
+    player.hideInfo = function() {};
+
+    var oldresolutionchange = player.onResolutionChange;
+    player.onResolutionChange = function(width,height) {
+        //hide console show canvas
+        $(".moai-canvas-wrapper")[0].style.display = "table-row";
+        $(".moai-console-wrapper")[0].style.display = "none";
+        oldresolutionchange.bind(this);
+    };
+    var $moaiconsole = $(".moai-console")[0];
+    player.onPrint = function(x) {
+        $moaiconsole.innerText = $moaiconsole.innerText + "\n" + x;
+        $moaiconsole.scrollTop = $moaiconsole.scrollHeight;
+    };
+
+
+
     var script =b64.base64ToStr(decodeURIComponent("<%- fiddle.encfiddle %>"));
     var firstrun = true;
 
@@ -91,13 +110,15 @@
         $("#moai-play")[0].style.opacity = 0.2;
     }
     function firstLaunch() {
+
         player.loadRom('/moaijs/moaiapp.rom');
         player.runString(script);
     }
     function doRun () {
         if (player.isSupported()) {
             $(".moai-window").removeClass("code");
-            $(".moai-canvas-wrapper")[0].style.display = "table-row";
+           // $(".moai-canvas-wrapper")[0].style.display = "table-row";
+            $(".moai-console-wrapper")[0].style.display = "table-row";
             $(".moai-info")[0].style.display = "none";
             if (firstrun) {
                firstrun = false;
@@ -130,6 +151,8 @@
         firstrun = true;
         $(".moai-window").addClass("code");
         $(".moai-canvas-wrapper")[0].style.display = "none";
+        $(".moai-console-wrapper")[0].style.display = "none";
+        $(".moai-console")[0].innerText = "";
         $(".moai-info")[0].style.display = "table-row";
     })
 
