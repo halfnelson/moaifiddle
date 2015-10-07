@@ -90,7 +90,6 @@
     text-align: center;
     font-family: Helvetica,'Trebuchet MS','Liberation Sans',FreeSans,sans-serif;
     font-size: 24px;
-    text-shadow: 1px 1px 6px;
 }
 
 .moai-footer
@@ -221,8 +220,6 @@ body {
     position: absolute;
     width: 150px;
     height: 100px;
-    border: 1px;
-
     top: 40%;
     left: 50%;
     margin-left: -75px;
@@ -243,6 +240,16 @@ body {
 
 .moai-info code {
     font-size: 12px;
+}
+
+
+.moai-console, .moai-status {
+    color: #CCCCCC;
+}
+
+.moai-console {
+    padding: 10px 20px;
+    font-size: 16px;
 }
 
 
