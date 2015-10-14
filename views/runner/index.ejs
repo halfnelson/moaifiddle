@@ -168,7 +168,10 @@
             player.onError = function(x) {
                parent.consoleError(x);
             };
-            player.loadRom('/moaijs/moaiapp.rom');
+
+
+            player.loadRomRaw(window.top.moaifiddle.romData, window.top.moaifiddle.romJson);
+            //player.loadRom('/moaijs/moaiapp.rom');
 
             try {
             <% if(fiddle) { %>

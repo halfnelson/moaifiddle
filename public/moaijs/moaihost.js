@@ -231,7 +231,7 @@ function installFile(emscripten, romPackage, start, end, name) {
   var byteArray = romPackage.subarray(start, end);
   var d = D.defer() 
   emscripten['FS_createPreloadedFile'](name, null, byteArray, true, true, function() {
-    d.resolve(true)
+      d.resolve(true)
   }, function() {
     d.reject( 'Preloading file ' + name + ' failed');
   }, false, true); 
@@ -293,11 +293,10 @@ function doLoadRom(emscripten, romUrl, romProgress, fileProgress ) {
 
     function doLoadRomRaw(emscripten, romPackageRaw, fileSystemInfo, fileProgress ) {
         //return our promise for a fully created file system
-        return installFileSystemData(emscripten, romPackageRaw)
-            .then(function(installedRomPackage) {
-                //create filesystem entries pointing to blob segements
-                return installFiles(emscripten, installedRomPackage, fileSystemInfo, fileProgress);
-            });
+        var installedData = installFileSystemData(emscripten, romPackageRaw)
+
+        //create filesystem entries pointing to blob segements
+        return installFiles(emscripten, installedData, fileSystemInfo, fileProgress);
     }
 
 
@@ -859,7 +858,7 @@ MoaiPlayer.prototype.loadRom = function(rom) {
 
 MoaiPlayer.prototype.loadRomRaw = function(romRaw, fsInfo) {
     if (!this.moai) { this.initMoai(); }
-    this.moai.loadFileSystemRaw(romRaw, fsinfo);
+    this.moai.loadFileSystemRaw(romRaw, fsInfo);
 }
 
 MoaiPlayer.prototype.runString = function(str) {
