@@ -50,7 +50,7 @@
         {{# fileList( files ) }}
         <li style="padding-left: {{depth * 5}}px; display:{{ visible(parent) ? 'list-item':'none' }};  color: {{highlight(fullPath(this))}}  "
         class="{{dir ? "dir" :"file"}} {{closed(fullPath(this)) ? "closed": ""}}"
-        data-path="{{fullPath(this)}}"
+        data-path="{{fullPath(this)}}" data-parent="{{parent}}"
         ><i class="fa"></i> {{name}}   </li>
         {{/ end file list}}
     </ul>
@@ -147,13 +147,52 @@
                 if (!target) return;
                 var path = target.attr("data-path");
                 this.fire("open",path);
-            }.bind(this))
+            }.bind(this));
+
+            $("#fileBrowser").on("drop", function(e) {
+                var path = $(e.target).attr("data-parent");
+
+                if ($(e.target).hasClass("dir")) {
+                    path = $(e.target).attr("data-path");
+                }
+
+                if (!path) {
+                    path = "/"
+                }
+                e.stopPropagation();
+                e.preventDefault();
+                this.addFiles(e.originalEvent.dataTransfer.files, path)
+            }.bind(this));
+
+
+
+            $("#fileBrowser")[0].addEventListener("dragover", function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+            })
+
+
+        },
+        addFile: function(file, dir) {
+            var reader = new FileReader();
+            reader.onload =  function(e) {
+                this.fire("addFile",{data: e.target.result, filename: file.name, dir: dir} );
+            }.bind(this);
+            reader.readAsArrayBuffer(file);
+        },
+
+        addFiles: function(files, parent) {
+           console.log("got files for",parent);
+            for (var i = 0, f; f = files[i]; i++) {
+                console.log("name", f.name,"size", f.size);
+                this.addFile(f,parent);
+            }
         },
         init: function () {
 
             this.observe('colors',function() {
                 console.log(this.get('colors'));
-            })
+            });
 
             this.on("toggle", function (event) {
 

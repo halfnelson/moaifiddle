@@ -12,7 +12,7 @@
 
 </div>
 
-<div id="fileBrowserContainer"><filebrowser on-open="previewFile"   files="{{fileBrowserFiles}}" colors="{{highlights}}"></filebrowser></div>
+<div id="fileBrowserContainer"><filebrowser on-open="previewFile" on-addfile="addFile" files="{{fileBrowserFiles}}" colors="{{highlights}}"></filebrowser></div>
 
 
 <div class="cols"  style="left: {{ filelist.visible ? 209 : 9}}px">
