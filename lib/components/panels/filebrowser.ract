@@ -117,7 +117,9 @@
                         if (f.path[j] != lastpath[j]) {
                             var start = j;
                             for (var k = start; k < f.path.length; k++) {
-                                fs.push({idx: i, name: f.path[k], depth: k, dir: true, parent: currentpath});
+                                if (!(f.path[k] == "/" || f.path[k] == "")) {
+                                    fs.push({idx: i, name: f.path[k], depth: k, dir: true, parent: currentpath});
+                                }
                                 currentpath = currentpath + (currentpath == '/' ? '' : '/') + f.path[k];
                             }
                             break;
