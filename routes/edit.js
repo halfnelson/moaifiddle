@@ -41,6 +41,9 @@ var save = function (req, res,next) {
     var slug = req.params.slug;
     var revision = req.params.revision || 1;
     var fiddleContents = req.body.fiddle;
+    var romData = req.body.rom;
+    var romJson = req.body.json;
+
     var fiddle;
     if (!slug) {
         //new fiddle
