@@ -12,8 +12,8 @@ function createRomTable(db, callback) {
 }
 
 function addRomColumn(db, callback) {
-    db.addColumn('fiddles', 'romid', {
-        type: 'int', defaultValue: -1
+    db.addColumn('fiddles', 'romhash', {
+        type: 'string', defaultValue: ""
     }, callback)
 }
 
@@ -28,11 +28,12 @@ exports.up = function(db, callback) {
 };
 
 exports.down = function(db, callback) {
-    db.removeColumn("fiddles", "romid", function(err) {
+    db.removeColumn("fiddles", "romhash", function(err) {
         if (err) {
             callback(err);
         } else {
             db.dropTable('roms', callback)
         }
     })
+
 };
