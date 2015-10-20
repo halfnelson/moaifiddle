@@ -25,9 +25,10 @@ app.engine('hjs', require('hogan-express'));
 app.use(favicon());
 
 app.use(logger('dev'));
+app.use(express.limit(100000000));
 app.use(express.compress());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.json({limit: '10mb'}));
+app.use(bodyParser.urlencoded({limit: '10mb'}));
 app.use(cookieParser());
 
 //shim for our moaijs.js file
