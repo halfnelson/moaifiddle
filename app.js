@@ -22,13 +22,15 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
 app.set('layout','layout');
 app.engine('hjs', require('hogan-express'));
-app.use(favicon());
+
+app.use(bodyParser({limit: '10mb'}));
 
 app.use(logger('dev'));
 app.use(express.limit(100000000));
 app.use(express.compress());
-app.use(bodyParser.json({limit: '10mb'}));
-app.use(bodyParser.urlencoded({limit: '10mb'}));
+//app.use(bodyParser.raw({limit: '10mb'}));
+
+app.use(favicon());
 app.use(cookieParser());
 
 //shim for our moaijs.js file
