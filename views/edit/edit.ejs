@@ -32,8 +32,11 @@
         this.setFiddleText(fiddle);
         this.set("slug","<%= fiddle.slug || '' %>");
         this.set("revision","<%= fiddle.revision || 1 %>");
+
+        var romhash = "<%= fiddle.romhash || "new" %>";
+
         //load our files
-        this.loadFileSystem('/moaijs/moaiapp.rom');
+        this.loadFileSystem('/rom/'+romhash+'/fiddle.rom');
     });
 
     function consoleWrite(x) {

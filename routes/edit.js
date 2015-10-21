@@ -21,9 +21,11 @@ var show = function(req, res, next) {
         var f = new Fiddle();
         if (req.body.fiddle) {
             f.fiddle = req.body.fiddle;
+            f.romhash = req.body.romhash || "legacy";
         } else {
             //default fiddle
             f.fiddle = defaultFiddle;
+            f.romhash = "new";
         }
         fiddlePromise = D.resolved(f);
     }
@@ -35,6 +37,7 @@ var show = function(req, res, next) {
             res.send(404,"No such fiddle");
             return;
         }
+        if (!fiddle.romhash) { fiddle.romhash = "legacy"; } //support old static rom versions
         fiddle.encfiddle = encodeURIComponent(b64.strToBase64(fiddle.fiddle));
         res.render('edit/edit.ejs',{fiddle: fiddle});
     }).error(next);
