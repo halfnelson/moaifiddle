@@ -55,9 +55,7 @@ var json = function (req, res, next) {
         })
         .error(function() {
             res.send(500, "error loading rom json");
-        })
-
-    return legacyJson(req,res,next);
+        });
 };
 
 var legacyJson = function(req, res, next) {
