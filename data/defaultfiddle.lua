@@ -21,7 +21,7 @@ layer:setViewport ( viewport )
 MOAISim.pushRenderPass ( layer )
 
 gfxQuad = MOAIGfxQuad2D.new ()
-gfxQuad:setTexture ( "/img/moai.png" )
+gfxQuad:setTexture ( "moai.png" )
 gfxQuad:setRect ( -64, -64, 64, 64 )
 
 prop = MOAIProp2D.new ()
@@ -30,7 +30,7 @@ prop:setLoc ( 0, 80 )
 layer:insertProp ( prop )
 
 font = MOAIFont.new ()
-font:loadFromTTF ( "/font/Roboto-Regular.ttf", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.?!", 12, 163 )
+font:loadFromTTF ( "arialbd.ttf", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.?!", 12, 163 )
 
 textbox = MOAITextBox.new ()
 textbox:setFont ( font )

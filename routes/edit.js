@@ -49,7 +49,14 @@ var saveRom = function(romHash, romData, romJson) {
     rom.romdata = romData;
     rom.json = romJson;
     return romRepo.create(rom)
-        .error(function(res) { console.log("rom save failed with error: ",res); })
+        .error(function(res) {
+            if (res.errno != 19) {
+                console.log("rom save failed with error: ", res);
+                throw res
+            } else {
+                return rom;
+            }
+        })
         .then(function(res) { console.log(res); return rom });
 };
 
