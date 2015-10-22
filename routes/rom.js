@@ -11,7 +11,18 @@ var rom = function(req, res, next) {
         return newFiddleRom(req, res, next);
     }
 
-    return legacyRom(req,res,next);
+    romRepo.find(req.params.romhash)
+        .then(function(rom) {
+            if (rom) {
+                console.log("sending rom data");
+                res.send( new Buffer(rom.romdata,'base64') );
+            } else {
+                res.send('404',"rom not found");
+            }
+        })
+        .error(function() {
+            res.send(500, "error loading rom");
+        })
 };
 
 var legacyRom = function(req, res, next) {
@@ -31,6 +42,20 @@ var json = function (req, res, next) {
     if (req.params.romhash == 'new') {
         return newFiddleJson(req, res, next);
     }
+
+    romRepo.find(req.params.romhash)
+        .then(function(rom) {
+            if (rom) {
+                console.log("sending rom json");
+                res.type("json");
+                res.send( rom.json );
+            } else {
+                res.send('404',"rom  not found");
+            }
+        })
+        .error(function() {
+            res.send(500, "error loading rom json");
+        })
 
     return legacyJson(req,res,next);
 };
