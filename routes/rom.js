@@ -15,14 +15,15 @@ var rom = function(req, res, next) {
         .then(function(rom) {
             if (rom) {
                 console.log("sending rom data");
-                res.send( new Buffer(rom.romdata,'base64') );
+                res.send( rom.romdata );
             } else {
                 res.send('404',"rom not found");
             }
         })
-        .error(function() {
+        .error(next);
+        /*{function(err) {
             res.send(500, "error loading rom");
-        })
+        })*/
 };
 
 var legacyRom = function(req, res, next) {
@@ -53,9 +54,7 @@ var json = function (req, res, next) {
                 res.send('404',"rom  not found");
             }
         })
-        .error(function() {
-            res.send(500, "error loading rom json");
-        });
+        .error(next);
 };
 
 var legacyJson = function(req, res, next) {

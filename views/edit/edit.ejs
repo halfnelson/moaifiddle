@@ -33,7 +33,7 @@
         this.set("slug","<%= fiddle.slug || '' %>");
         this.set("revision","<%= fiddle.revision || 1 %>");
 
-        var romhash = "<%= fiddle.romhash || "new" %>";
+        var romhash = "<%= fiddle.rom_hash || "new" %>";
 
         //load our files
         this.loadFileSystem('/rom/'+romhash+'/fiddle.rom');

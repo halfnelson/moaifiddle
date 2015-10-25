@@ -21,11 +21,11 @@ var show = function(req, res, next) {
         var f = new Fiddle();
         if (req.body.fiddle) {
             f.fiddle = req.body.fiddle;
-            f.romhash = req.body.romhash || "legacy";
+            f.rom_hash = req.body.rom_hash || "legacy";
         } else {
             //default fiddle
             f.fiddle = defaultFiddle;
-            f.romhash = "new";
+            f.rom_hash = "new";
         }
         fiddlePromise = D.resolved(f);
     }
@@ -37,27 +37,17 @@ var show = function(req, res, next) {
             res.send(404,"No such fiddle");
             return;
         }
-        if (!fiddle.romhash) { fiddle.romhash = "legacy"; } //support old static rom versions
+        if (!fiddle.rom_hash) { fiddle.rom_hash = "legacy"; } //support old static rom versions
         fiddle.encfiddle = encodeURIComponent(b64.strToBase64(fiddle.fiddle));
         res.render('edit/edit.ejs',{fiddle: fiddle});
     }).error(next);
 };
 
-var saveRom = function(romHash, romData, romJson) {
-    var rom = new Rom();
-    rom.hash = romHash;
-    rom.romdata = romData;
-    rom.json = romJson;
+var saveRom = function(rom) {
     return romRepo.create(rom)
-        .error(function(res) {
-            if (res.errno != 19) {
-                console.log("rom save failed with error: ", res);
-                throw res
-            } else {
-                return rom;
-            }
-        })
-        .then(function(res) { console.log(res); return rom });
+        .then(function(res) { console.log(res); return rom }).error(function(err) {
+        console.log("error saving rom", err);
+    });
 };
 
 
@@ -67,19 +57,22 @@ var save = function (req, res,next) {
     var fiddleContents = req.body.fiddle;
     var romData = req.body.rom;
     var romJson = req.body.json;
-    var romHash = md5(romJson+romData);
+
+    var r = Rom.create(romJson,romData);
 
     var fiddle;
     if (!slug) {
+        //new rom
+
         //new fiddle
-        f = new Fiddle();
+        var f = new Fiddle();
         f.fiddle = fiddleContents;
         f.revision = 1;
-        f.romhash = romHash;
+        f.rom_hash = r.rom_hash;
         f.generateSlug();
 
-        fiddle = saveRom(romHash, romData, romJson).then(function () {
-            return fiddleRepo.create(f).then(function(res){ console.log(res); return f; })
+        fiddle = saveRom(r).then(function () {
+            return fiddleRepo.create(f).then(function(res){ console.log(res); return f; }).error(next)
         })
     } else {
         //get this revision
@@ -90,16 +83,16 @@ var save = function (req, res,next) {
                     return D.rejected("No such fiddle");
                 }
                 //if we are the same, then don't create a new revision
-                if (currentFiddle.fiddle == fiddleContents && currentFiddle.romhash == romHash ) {
+                if (currentFiddle.fiddle == fiddleContents && currentFiddle.rom_hash == r.rom_hash ) {
                     return currentFiddle;
                 } else {
                     return fiddleRepo.findLatest(slug)
                         .then(function (latestFiddle) {
                             //create new revision
                             var f = latestFiddle.nextRevision();
-                            f.romhash = romHash;
+                            f.rom_hash = r.rom_hash;
                             f.fiddle = fiddleContents;
-                            return saveRom(romHash, romData, romJson).then(function(){
+                            return saveRom(r).then(function(){
                                 return fiddleRepo.create(f).then(function () {
                                     return f
                                 });

@@ -5,15 +5,15 @@ function createRomTable(db, callback) {
     db.createTable('roms', {
         id: { type: 'int', primaryKey: true, autoIncrement: true },
         hash: { type: 'string', notNull: true },
-        json: 'text',
         romdata: 'text',
-        created: 'datetime'
+        created: 'datetime',
+        size: 'int'
     }, callback);
 }
 
 function addRomColumn(db, callback) {
-    db.addColumn('fiddles', 'romhash', {
-        type: 'string', defaultValue: ""
+    db.addColumn('fiddles', 'rom_hash', {
+        type: 'string'
     }, callback)
 }
 
@@ -28,7 +28,7 @@ exports.up = function(db, callback) {
 };
 
 exports.down = function(db, callback) {
-    db.removeColumn("fiddles", "romhash", function(err) {
+    db.removeColumn("fiddles", "rom_hash", function(err) {
         if (err) {
             callback(err);
         } else {
