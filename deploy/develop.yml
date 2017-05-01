@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  webapp:
+    build: ../
+    ports:
+      - 3000:3000
+    volumes:
+      - fiddledata:/usr/src/app/sqlite 
+  
+volumes:
+  fiddledata: 
+

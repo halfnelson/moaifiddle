@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  webapp:
+    networks: 
+      nginx:
+        aliases:
+          - moaifiddle
+    volumes:
+      - ./sqlite_data:/usr/src/app/sqlite 
+    restart: always
+
+networks: 
+  nginx:
+    external: true

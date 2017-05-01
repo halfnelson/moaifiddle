@@ -1,0 +1,18 @@
+version: '3'
+services:
+
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - '80:80'
+      - '443:443'
+    restart: always
+    networks:
+      - nginx
+    environment:
+      - "DOMAINS=moaifiddle.com -> http://moaifiddle:3000"
+
+
+networks:
+  nginx:
+    external: true

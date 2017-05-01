@@ -1,3 +1,3 @@
 {
-    "dev": "sqlite3://fiddle.db"
+    "dev": "sqlite3://sqlite/fiddle.db"
 }
